@@ -1,8 +1,15 @@
 import React from 'react';
-import Message from './Message.js';
-import { InputGroup, InputGroupAddon, Input, Button } from 'reactstrap';
-import { Thread, TopBarChannelName, ChannelName, AllMessages, PostMessageInput } from "./StyledComponents/Channel.style";
-import { GlobalInput } from "./StyledComponents/Menu.style";
+import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import Message from './Message';
+import {
+  Thread,
+  TopBarChannelName,
+  ChannelName,
+  AllMessages,
+  PostMessageInput,
+} from './StyledComponents/Channel.style';
+import { GlobalInput } from './StyledComponents/Menu.style';
+
 class Channel extends React.Component {
   state = {
     chanName: this.props.chanName,
@@ -13,11 +20,21 @@ class Channel extends React.Component {
     shouldRefetchMessages: false,
   };
 
+  componentDidMount() {
+    this.getMessages();
+  }
+
+  componentDidUpdate() {
+    if (this.state.shouldRefetchMessages) {
+      this.setState({ shouldRefetchMessages: false });
+      this.getMessages();
+    }
+  }
+
   getMessagesContent = e => {
     this.setState({
       messageContent: [e.target.value],
     });
-    console.log('message content', this.state.messageContent);
   };
 
   async getMessages() {
@@ -44,10 +61,6 @@ class Channel extends React.Component {
     this.setState({ shouldRefetchMessages: true, messageContent: '' });
   };
 
-  componentDidMount() {
-    this.getMessages();
-  }
-
   static getDerivedStateFromProps(nextProps, prevState) {
     // will need to refetch whenever React Router passes another channel id without unmounting component
     if (nextProps.channelId !== prevState.channelId) {
@@ -59,13 +72,6 @@ class Channel extends React.Component {
       };
     }
     return null;
-  }
-
-  componentDidUpdate() {
-    if (this.state.shouldRefetchMessages) {
-      this.setState({ shouldRefetchMessages: false });
-      this.getMessages();
-    }
   }
 
   render() {

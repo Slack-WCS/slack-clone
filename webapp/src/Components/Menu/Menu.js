@@ -1,11 +1,19 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import BurgerButton from './BurgerButton';
 import InfoHeader from './InfoHeader';
 import SearchBar from './SearchBar';
 import Channel from '../Channel';
-import { Link, Route, Switch } from 'react-router-dom';
-import { MenuListElements, CreateChannelForm, GlobalInput, LeftNavbar, Navbar, RouteLink, NavbarLinks  } from "../StyledComponents/Menu.style";
-import { InputGroup, InputGroupAddon, Input, Button, Form } from 'reactstrap';
+import {
+  MenuListElements,
+  CreateChannelForm,
+  GlobalInput,
+  LeftNavbar,
+  Navbar,
+  RouteLink,
+  NavbarLinks,
+} from '../StyledComponents/Menu.style';
 
 class Menu extends React.Component {
   // On créer un état qui (ici) est un booléen false pour le moment car un état doit changer par la suite
@@ -16,6 +24,17 @@ class Menu extends React.Component {
     shouldRefreshChannels: false,
     channelId: '',
   };
+
+  componentDidMount() {
+    this.getChannels();
+  }
+
+  componentDidUpdate() {
+    if (this.state.shouldRefreshChannels) {
+      this.getChannels();
+    }
+  }
+
   getNameChannels = e => {
     this.setState({
       nameChannels: [e.target.value],
@@ -32,7 +51,7 @@ class Menu extends React.Component {
 
   // Fonction qui récupère le nom des channels pour les passer en props au composant Channel
   getChanName = idChan => {
-    let res = this.state.channels.map(chan => {
+    const res = this.state.channels.map(chan => {
       if (chan.id === parseInt(idChan)) {
         return chan.name;
       }
@@ -67,18 +86,9 @@ class Menu extends React.Component {
     this.setState({ shouldRefreshChannels: true });
   };
 
-  componentDidMount() {
-    this.getChannels();
-  }
-  componentDidUpdate() {
-    if (this.state.shouldRefreshChannels) {
-      this.getChannels();
-    }
-  }
-
   render() {
     //   On créer une constante burgerButton qui vérifie si isOpenMenu est il est égal à true (on set la classe de la balise à 'burger_button open_burger' ) ou si égal à false (on set la classe de la balise à 'burger_button' )
-    const burgerButton = this.state.isOpenMenu
+    const burgerButton = this.state.isOpenMenu;
 
     return (
       <div>
@@ -87,14 +97,11 @@ class Menu extends React.Component {
           <BurgerButton
             fonction={this.toggleIsOpenMenu}
             burgerButton={burgerButton}
-            
           />
           {/* si isOpenMenu est égal à true on set la classe à 'is-visible-in-mobile' */}
-          <LeftNavbar
-            isOpenMenu={this.state.isOpenMenu}
-          >
+          <LeftNavbar isOpenMenu={this.state.isOpenMenu}>
             <MenuListElements>
-              <InfoHeader/>
+              <InfoHeader />
             </MenuListElements>
             <MenuListElements>
               <SearchBar />

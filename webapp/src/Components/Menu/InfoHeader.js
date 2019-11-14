@@ -4,7 +4,6 @@ import {
   UserStatus,
   WebsiteName,
 } from '../StyledComponents/InfoHeader.style';
-import logo from './coucou.png';
 
 const InfoHeader = () => {
   return (

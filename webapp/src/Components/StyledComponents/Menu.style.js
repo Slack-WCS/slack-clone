@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { InputGroup, InputGroupAddon, Input, Button, Form } from 'reactstrap';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Input, Form } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const MenuListElements = styled.li`
   padding: 5px 0px;
@@ -124,6 +124,5 @@ export {
   Navbar,
   LeftNavbar,
   RouteLink,
-  NavbarLinks, 
-  
+  NavbarLinks,
 };

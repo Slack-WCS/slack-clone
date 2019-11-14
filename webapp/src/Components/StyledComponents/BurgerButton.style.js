@@ -60,4 +60,4 @@ const BurgerButtonStick = styled.span`
      `}
 `;
 
-export { BurgerButtonStick, MobileBurgerButton, };
+export { BurgerButtonStick, MobileBurgerButton };

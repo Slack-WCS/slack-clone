@@ -1,5 +1,16 @@
 import React from 'react';
-import { SearchChannelBloc, ButtonSearchChannel, ModalContainer, ModalSearchChannel, SearchForm, ChannelSearchInput, SearchChannelList, SearchChannelListElements, ShortcutsList, ShortcutsListElements } from "../StyledComponents/SearchBar.style";
+import {
+  SearchChannelBloc,
+  ButtonSearchChannel,
+  ModalContainer,
+  ModalSearchChannel,
+  SearchForm,
+  ChannelSearchInput,
+  SearchChannelList,
+  SearchChannelListElements,
+  ShortcutsList,
+  ShortcutsListElements,
+} from '../StyledComponents/SearchBar.style';
 
 const SearchBar = () => {
   return (
@@ -28,20 +39,32 @@ const SearchBar = () => {
                   className="global-input"
                   type="search"
                   placeholder="Search your channel..."
-                ></ChannelSearchInput>
+                />
               </SearchForm>
               <div>
                 <SearchChannelList>
-                  <SearchChannelListElements>Un premier channel</SearchChannelListElements>
-                  <SearchChannelListElements>Un second channel</SearchChannelListElements>
-                  <SearchChannelListElements>Un troisième channel</SearchChannelListElements>
+                  <SearchChannelListElements>
+                    Un premier channel
+                  </SearchChannelListElements>
+                  <SearchChannelListElements>
+                    Un second channel
+                  </SearchChannelListElements>
+                  <SearchChannelListElements>
+                    Un troisième channel
+                  </SearchChannelListElements>
                 </SearchChannelList>
               </div>
               <div>
                 <ShortcutsList>
-                  <ShortcutsListElements>Un premier raccourci</ShortcutsListElements>
-                  <ShortcutsListElements>Un second raccourci</ShortcutsListElements>
-                  <ShortcutsListElements>Un troisième raccourci</ShortcutsListElements>
+                  <ShortcutsListElements>
+                    Un premier raccourci
+                  </ShortcutsListElements>
+                  <ShortcutsListElements>
+                    Un second raccourci
+                  </ShortcutsListElements>
+                  <ShortcutsListElements>
+                    Un troisième raccourci
+                  </ShortcutsListElements>
                 </ShortcutsList>
               </div>
             </ModalSearchChannel>
