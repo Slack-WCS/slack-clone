@@ -10,6 +10,10 @@ const CreateChannelForm = styled(Form)`
   width: 95%;
   margin: auto;
 `;
+const DeleteChannel = styled.div`
+  cursor: pointer;
+  float: right;
+`;
 const GlobalInput = styled(Input)`
   appearance: none;
   background: #444;
@@ -125,4 +129,5 @@ export {
   LeftNavbar,
   RouteLink,
   NavbarLinks,
+  DeleteChannel,
 };

@@ -13,6 +13,7 @@ import {
   Navbar,
   RouteLink,
   NavbarLinks,
+  DeleteChannel,
 } from '../StyledComponents/Menu.style';
 
 class Menu extends React.Component {
@@ -132,8 +133,12 @@ class Menu extends React.Component {
                   <li key={channel.id}>
                     <RouteLink to={`/channels/${channel.id}/messages`}>
                       {channel.name}
+                      <DeleteChannel
+                        onClick={() => this.deleteChannels(channel.id)}
+                      >
+                        X
+                      </DeleteChannel>
                     </RouteLink>
-                    <div onClick={() => this.deleteChannels(channel.id)}>X</div>
                   </li>
                 ))}
               </ul>
