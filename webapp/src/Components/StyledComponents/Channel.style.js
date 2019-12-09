@@ -20,7 +20,8 @@ const TopBarChannelName = styled.div`
     max-height: initial;
     height: 10vh;
   }
-  height: 12vh;
+  background: #444;
+  height: 14vh;
   display: flex;
 `;
 
