@@ -17,6 +17,8 @@ import {
   NavbarLinks,
   DeleteChannel,
 } from '../StyledComponents/Menu.style';
+import LogIn from '../LogIn';
+import SignUp from '../SignUp';
 
 class Menu extends React.Component {
   // On créer un état qui (ici) est un booléen false pour le moment car un état doit changer par la suite
@@ -147,6 +149,7 @@ class Menu extends React.Component {
                 </ul>
               </MenuListElements>
 
+<<<<<<< HEAD
               <MenuListElements>
                 <NavbarLinks href="#">Private messages</NavbarLinks>
               </MenuListElements>
@@ -169,6 +172,31 @@ class Menu extends React.Component {
           </Switch>
         </div>
       </>
+=======
+            <MenuListElements>
+              <NavbarLinks href="#">Private messages</NavbarLinks>
+            </MenuListElements>
+          </LeftNavbar>
+        </Navbar>
+        <Switch>
+          <Route path="/log_in">
+            <LogIn />
+          </Route>
+          <Route path="/sign_up">
+            <SignUp />
+          </Route>
+          <Route
+            path="/channels/:channelId/messages"
+            render={props => (
+              <Channel
+                channelId={props.match.params.channelId}
+                chanName={this.getChanName(props.match.params.channelId)}
+              />
+            )}
+          />
+        </Switch>
+      </div>
+>>>>>>> front authentification
     );
   }
 }
