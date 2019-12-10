@@ -17,6 +17,7 @@ const SignUpFormContainer = styled.form`
   align-items: center;
   justify-content: center;
 `;
+
 const SignUpForm = styled.form`
   @media screen and (min-width: 769px) {
     width: 40vw;
@@ -58,6 +59,7 @@ const SignUpInput = styled.input`
     border: 2px solid #22c125;
   }
 `;
+
 const SignUpButton = styled.button`
   @media screen and (min-width: 769px) {
     margin: 10px 60px 0 auto;
