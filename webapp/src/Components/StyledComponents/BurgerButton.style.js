@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const MobileBurgerButton = styled.button`
   @media all and (max-width: 768px) {
+    margin: 5px;
     display: block;
   }
   -webkit-appearance: none;

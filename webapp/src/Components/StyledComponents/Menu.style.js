@@ -31,9 +31,9 @@ const GlobalInput = styled(Input)`
 const Navbar = styled.nav`
   @media all and (max-width: 768px) {
     background: #333;
-    padding: 5px;
     position: fixed;
     width: 100vw;
+    height: 35px;
   }
   position: fixed;
   z-index: 2000;
