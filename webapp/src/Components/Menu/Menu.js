@@ -5,6 +5,8 @@ import BurgerButton from './BurgerButton';
 import InfoHeader from './InfoHeader';
 import SearchBar from './SearchBar';
 import Channel from '../Channel';
+import SignUp from '../SignUp';
+import Login from '../LogIn';
 import {
   MenuListElements,
   CreateChannelForm,
@@ -92,75 +94,81 @@ class Menu extends React.Component {
     const burgerButton = this.state.isOpenMenu;
 
     return (
-      <div>
-        <Navbar role="navigation">
-          {/* On appel le composant BurgerButton et on lui fais passer en paramètre la fonction toggleIsOpenMenu et burgerButton */}
-          <BurgerButton
-            fonction={this.toggleIsOpenMenu}
-            burgerButton={burgerButton}
-          />
-          {/* si isOpenMenu est égal à true on set la classe à 'is-visible-in-mobile' */}
-          <LeftNavbar isOpenMenu={this.state.isOpenMenu}>
-            <MenuListElements>
-              <InfoHeader />
-            </MenuListElements>
-            <MenuListElements>
-              <SearchBar />
-            </MenuListElements>
-            <MenuListElements>
-              <NavbarLinks href="#">Home</NavbarLinks>
-            </MenuListElements>
-            <MenuListElements>
-              <ul>
-                <li>
-                  <CreateChannelForm onSubmit={this.postChannels}>
-                    <InputGroup>
-                      <GlobalInput
-                        placeholder="Create channel"
-                        type="text"
-                        value={this.state.nameChannels}
-                        onChange={this.getNameChannels}
-                      />
-                      <InputGroupAddon addonType="append">
-                        <Button className="submit-button" type="submit">
-                          Create
-                        </Button>
-                      </InputGroupAddon>
-                    </InputGroup>
-                  </CreateChannelForm>
-                </li>
-                {this.state.channels.map(channel => (
-                  <li key={channel.id}>
-                    <RouteLink to={`/channels/${channel.id}/messages`}>
-                      {channel.name}
-                      <DeleteChannel
-                        onClick={() => this.deleteChannels(channel.id)}
-                      >
-                        X
-                      </DeleteChannel>
-                    </RouteLink>
+      <>
+        <div>
+          <Navbar role="navigation">
+            {/* On appel le composant BurgerButton et on lui fais passer en paramètre la fonction toggleIsOpenMenu et burgerButton */}
+            <BurgerButton
+              fonction={this.toggleIsOpenMenu}
+              burgerButton={burgerButton}
+            />
+            {/* si isOpenMenu est égal à true on set la classe à 'is-visible-in-mobile' */}
+            <LeftNavbar isOpenMenu={this.state.isOpenMenu}>
+              <MenuListElements>
+                <InfoHeader />
+              </MenuListElements>
+              <MenuListElements>
+                <SearchBar />
+              </MenuListElements>
+              <MenuListElements>
+                <NavbarLinks href="#">Home</NavbarLinks>
+              </MenuListElements>
+              <MenuListElements>
+                <ul>
+                  <li>
+                    <CreateChannelForm onSubmit={this.postChannels}>
+                      <InputGroup>
+                        <GlobalInput
+                          placeholder="Create channel"
+                          type="text"
+                          value={this.state.nameChannels}
+                          onChange={this.getNameChannels}
+                        />
+                        <InputGroupAddon addonType="append">
+                          <Button className="submit-button" type="submit">
+                            Create
+                          </Button>
+                        </InputGroupAddon>
+                      </InputGroup>
+                    </CreateChannelForm>
                   </li>
-                ))}
-              </ul>
-            </MenuListElements>
+                  {this.state.channels.map(channel => (
+                    <li key={channel.id}>
+                      <RouteLink to={`/channels/${channel.id}/messages`}>
+                        {channel.name}
+                        <DeleteChannel
+                          onClick={() => this.deleteChannels(channel.id)}
+                        >
+                          X
+                        </DeleteChannel>
+                      </RouteLink>
+                    </li>
+                  ))}
+                </ul>
+              </MenuListElements>
 
-            <MenuListElements>
-              <NavbarLinks href="#">Private messages</NavbarLinks>
-            </MenuListElements>
-          </LeftNavbar>
-        </Navbar>
-        <Switch>
-          <Route
-            path="/channels/:channelId/messages"
-            render={props => (
-              <Channel
-                channelId={props.match.params.channelId}
-                chanName={this.getChanName(props.match.params.channelId)}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+              <MenuListElements>
+                <NavbarLinks href="#">Private messages</NavbarLinks>
+              </MenuListElements>
+            </LeftNavbar>
+          </Navbar>
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={SignUp} />
+          </Switch>
+          <Switch>
+            <Route
+              path="/channels/:channelId/messages"
+              render={props => (
+                <Channel
+                  channelId={props.match.params.channelId}
+                  chanName={this.getChanName(props.match.params.channelId)}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </>
     );
   }
 }
