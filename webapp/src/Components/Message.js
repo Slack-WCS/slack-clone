@@ -4,7 +4,7 @@ class Message extends React.Component {
   render() {
     return (
       <div>
-        <b>nom utilisateur</b>
+        <b>Coco</b>
         <p>{this.props.content}</p>
       </div>
     );
