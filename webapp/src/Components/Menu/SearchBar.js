@@ -6,10 +6,10 @@ import {
   ModalSearchChannel,
   SearchForm,
   ChannelSearchInput,
-  SearchChannelList,
-  SearchChannelListElements,
-  ShortcutsList,
-  ShortcutsListElements,
+  // SearchChannelList,
+  // SearchChannelListElements,
+  // ShortcutsList,
+  // ShortcutsListElements,
 } from '../StyledComponents/SearchBar.style';
 
 const SearchBar = () => {
@@ -41,7 +41,7 @@ const SearchBar = () => {
                   placeholder="Search your channel..."
                 />
               </SearchForm>
-              <div>
+              {/* <div>
                 <SearchChannelList>
                   <SearchChannelListElements>
                     Un premier channel
@@ -66,7 +66,7 @@ const SearchBar = () => {
                     Un troisième raccourci
                   </ShortcutsListElements>
                 </ShortcutsList>
-              </div>
+              </div> */}
             </ModalSearchChannel>
           </ModalContainer>
         </div>
