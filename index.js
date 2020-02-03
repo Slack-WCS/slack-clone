@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 
 const app = express();
@@ -12,6 +13,8 @@ const port = process.env.PORT || 8000;
 // Middlewares
 app.use(morgan('dev'));
 // Body Parser configuration
+
+app.use(cookieParser());
 
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
