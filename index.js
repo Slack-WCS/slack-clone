@@ -17,12 +17,18 @@ app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use('/api', routes);
+
+// Authentification
+app.use('/auth', routes);
+
 // pour heroku + commande ds package
 app.use(express.static(path.join(__dirname, 'webapp', 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'webapp', 'build', 'index.html'));
 });
+// eslint-disable-next-line func-names
 app.listen(port, function() {
+  // eslint-disable-next-line no-console
   console.log(`Example app listening on port 127.0.0.1:${port}`);
 });
 

@@ -1,8 +1,25 @@
 const router = require('express').Router();
 const controllers = require('./controllers');
 
-// router GET
+// Messages & Channels
 router.get('/channels/:channelId/messages', controllers.getMessages);
+
+router.get('/channels', controllers.getChannels);
+
+// router POST
+// Authentification
+router.post('/users', controllers.createUser);
+
+// Channels & messages
+router.post('/channels', controllers.postChannels);
+
+router.post('/channels/:channelId/messages', controllers.postMessages);
+
+// router DELETE
+router.delete('/channels/:channelId', controllers.deleteChannels);
+
+// Route tests
+
 // router.get('/channels/:channelId/messages', (req, res) => {
 //   console.log(req.params.channelId);
 //   res.json({
@@ -27,7 +44,6 @@ router.get('/channels/:channelId/messages', controllers.getMessages);
 //   });
 // });
 
-router.get('/channels', controllers.getChannels);
 // router.get('/channels', (req, res) => {
 //   res.json({
 //     channels: [
@@ -42,13 +58,5 @@ router.get('/channels', controllers.getChannels);
 //     ],
 //   });
 // });
-
-// router POST
-router.post('/channels', controllers.postChannels);
-
-router.post('/channels/:channelId/messages', controllers.postMessages);
-
-// router DELETE
-router.delete('/channels/:channelId', controllers.deleteChannels);
 
 module.exports = router;

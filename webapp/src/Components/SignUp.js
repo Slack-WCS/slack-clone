@@ -8,12 +8,32 @@ import {
   LabelInputContainer,
 } from './StyledComponents/SignUp.style';
 
+const signUp = async event => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const username = formData.get('username');
+  const password = formData.get('password');
+  const response = await fetch('/api/users', {
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+  });
+  if (response.ok) {
+    console.log('res ok');
+  } else {
+    console.log('res error');
+  }
+};
+
 const SignUp = () => {
   return (
     <SignUpFormContainer>
-      <SignUpForm>
+      <SignUpForm onSubmit={signUp}>
         <fieldset>
-          <legend>Sign Up</legend>
+          <h2>Sign Up</h2>
           <LabelInputContainer>
             <SignUpLabel for="username">Username</SignUpLabel>
             <SignUpInput
@@ -21,19 +41,6 @@ const SignUp = () => {
               placeholder="toto189"
               name="username"
               pattern=".{1,40}"
-              aria-required
-              required
-            />
-            <span class="validity_check"></span>
-          </LabelInputContainer>
-
-          <LabelInputContainer>
-            <SignUpLabel for="email">Email</SignUpLabel>
-            <SignUpInput
-              type="email"
-              placeholder="toto@gmail.com"
-              name="email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               aria-required
               required
             />

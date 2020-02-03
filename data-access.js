@@ -1,4 +1,5 @@
 const pool = require('./db_pool');
+const { UnknownError } = require('./utils');
 
 const getChannels = async () => {
   const channels = await pool.query('SELECT * FROM channel ORDER BY id ASC');
@@ -11,6 +12,21 @@ const getMessages = async channelId => {
     [channelId]
   );
   return messages.rows;
+};
+
+const createUser = async (username, password) => {
+  try {
+    await pool.query(
+      `INSERT INTO users (username, password) VALUES ($1, crypt($2, gen_salt('bf')))`,
+      [username, password]
+    );
+  } catch (error) {
+    // Postgres UNIQUE VIOLATION
+    if (error.code === '23505') {
+      throw new Error('Username is already taken.');
+    }
+    throw new UnknownError();
+  }
 };
 
 const postChannels = nameChannels => {
@@ -34,4 +50,5 @@ module.exports = {
   postChannels,
   postMessages,
   deleteChannels,
+  createUser,
 };
