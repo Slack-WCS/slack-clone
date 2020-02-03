@@ -11,7 +11,7 @@ import {
 const LogIn = () => {
   return (
     <LogInFormContainer>
-      <LogInForm>
+      <LogInForm method="post">
         <fieldset>
           <legend>Login</legend>
 

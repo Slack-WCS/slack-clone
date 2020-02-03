@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const LogInFormContainer = styled.form`
+const LogInFormContainer = styled.div`
   @media screen and (min-width: 769px) {
     width: 80vw;
     left: 20vw;
