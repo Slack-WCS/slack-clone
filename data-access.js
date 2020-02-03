@@ -29,6 +29,22 @@ const createUser = async (username, password) => {
   }
 };
 
+const getVerifiedUserId = async (username, password) => {
+  const result = await pool.query(
+    'SELECT id FROM users WHERE username = $1 AND password = crypt($2, password)',
+    [username, password]
+  );
+  return result.rows[0].id;
+};
+
+const createSession = async userId => {
+  const result = await pool.query(
+    'INSERT INTO session (user_id) VALUES ($1) RETURNING session_id',
+    [userId]
+  );
+  return result.rows[0].session_id;
+};
+
 const postChannels = nameChannels => {
   pool.query(`INSERT INTO channel (name) VALUES ($1)`, [nameChannels]);
 };
@@ -51,4 +67,6 @@ module.exports = {
   postMessages,
   deleteChannels,
   createUser,
+  getVerifiedUserId,
+  createSession,
 };

@@ -10,6 +10,8 @@ router.get('/channels', controllers.getChannels);
 // Authentification
 router.post('/users', controllers.createUser);
 
+router.post('/sessions', controllers.createSession);
+
 // Channels & messages
 router.post('/channels', controllers.postChannels);
 
