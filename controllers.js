@@ -1,7 +1,7 @@
 const dataAccess = require('./data-access');
 
 // GET
-const getChannels = async (_req, res) => {
+const getChannels = async (req, res) => {
   const channels = await dataAccess.getChannels();
   return res.status(200).json({ channels });
 };
@@ -13,6 +13,15 @@ const getMessages = async (req, res) => {
   const messages = await dataAccess.getMessages(channelId);
   return res.status(200).json({ messages });
 };
+
+const getCurrentUser = (req, res) => {
+  const { user } = req;
+  if (user) {
+    return res.status(200).send(user);
+  }
+  return res.sendStatus(401);
+};
+
 // POST
 const postChannels = (req, res) => {
   const { nameChannels } = req.body;
@@ -20,11 +29,12 @@ const postChannels = (req, res) => {
   return res.send('channel posté');
 };
 
-const postMessages = (req, res) => {
-  const { contentMessages } = req.body.contentMessages;
-  const { channelId } = req.params.channelId;
-  dataAccess.postMessages(channelId, contentMessages);
-  return res.send('message posté');
+const postMessages = async (req, res) => {
+  const { contentMessages, channelId } = req.body;
+  const { user } = req;
+  await dataAccess.postMessages(channelId, contentMessages, user.id);
+
+  return res.status(201).send('Message added');
 };
 
 const getCleanPassword = password => {
@@ -80,4 +90,5 @@ module.exports = {
   deleteChannels,
   createUser,
   createSession,
+  getCurrentUser,
 };
