@@ -10,6 +10,8 @@ const app = express();
 require('dotenv').config();
 
 const port = process.env.PORT || 8000;
+const { setUser } = require('./middlewares');
+
 // Middlewares
 app.use(morgan('dev'));
 // Body Parser configuration
@@ -19,8 +21,8 @@ app.use(cookieParser());
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
+app.use(setUser);
 app.use('/api', routes);
-
 // Authentification
 app.use('/auth', routes);
 

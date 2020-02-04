@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { DASHBOARD_PATH } from '../../constants';
 import BurgerButton from './BurgerButton';
 import InfoHeader from './InfoHeader';
 import SearchBar from './SearchBar';
@@ -96,6 +97,7 @@ class Menu extends React.Component {
     const burgerButton = this.state.isOpenMenu;
 
     return (
+<<<<<<< HEAD
       <>
         <div>
           <Navbar role="navigation">
@@ -133,6 +135,55 @@ class Menu extends React.Component {
                         </InputGroupAddon>
                       </InputGroup>
                     </CreateChannelForm>
+=======
+      <div>
+        <Navbar role="navigation">
+          {/* On appel le composant BurgerButton et on lui fais passer en paramètre la fonction toggleIsOpenMenu et burgerButton */}
+          <BurgerButton
+            fonction={this.toggleIsOpenMenu}
+            burgerButton={burgerButton}
+          />
+          {/* si isOpenMenu est égal à true on set la classe à 'is-visible-in-mobile' */}
+          <LeftNavbar isOpenMenu={this.state.isOpenMenu}>
+            <MenuListElements>
+              <InfoHeader currentUser={this.props.currentUser} />
+            </MenuListElements>
+            <MenuListElements>
+              <SearchBar />
+            </MenuListElements>
+            <MenuListElements>
+              <NavbarLinks href="#">Home</NavbarLinks>
+            </MenuListElements>
+            <MenuListElements>
+              <ul>
+                <li>
+                  <CreateChannelForm onSubmit={this.postChannels}>
+                    <InputGroup>
+                      <GlobalInput
+                        placeholder="Create channel"
+                        type="text"
+                        value={this.state.nameChannels}
+                        onChange={this.getNameChannels}
+                      />
+                      <InputGroupAddon addonType="append">
+                        <Button className="submit-button" type="submit">
+                          Create
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </CreateChannelForm>
+                </li>
+                {this.state.channels.map(channel => (
+                  <li key={channel.id}>
+                    <RouteLink to={`/channels/${channel.id}/messages`}>
+                      {channel.name}
+                      <DeleteChannel
+                        onClick={() => this.deleteChannels(channel.id)}
+                      >
+                        X
+                      </DeleteChannel>
+                    </RouteLink>
+>>>>>>> affichage channels ok / affichage messages WIP
                   </li>
                   {this.state.channels.map(channel => (
                     <li key={channel.id}>

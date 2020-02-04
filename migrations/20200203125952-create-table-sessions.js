@@ -27,7 +27,7 @@ exports.up = async function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return db.runSql(`DROP TABLE session`);
 };
 
 exports._meta = {

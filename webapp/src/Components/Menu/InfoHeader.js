@@ -7,7 +7,12 @@ import {
   SessionLinks,
   SessionLinksContainer,
 } from '../StyledComponents/InfoHeader.style';
+<<<<<<< HEAD
 const InfoHeader = () => {
+=======
+
+const InfoHeader = ({ currentUser }) => {
+>>>>>>> affichage channels ok / affichage messages WIP
   return (
     <div>
       <WebsiteName>Slack-clone</WebsiteName>
@@ -19,7 +24,7 @@ const InfoHeader = () => {
 
       <div>
         <UserStatus>•</UserStatus>
-        <UserName>Nom de l'utilisateur</UserName>
+        <UserName>{currentUser.username}</UserName>
       </div>
     </div>
   );
