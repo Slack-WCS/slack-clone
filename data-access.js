@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const pool = require('./db_pool');
 const { UnknownError } = require('./utils');
 
@@ -8,10 +9,27 @@ const getChannels = async () => {
 
 const getMessages = async channelId => {
   const messages = await pool.query(
-    `SELECT * FROM message WHERE id_chan = $1`,
+    `SELECT * FROM messages WHERE id_chan = $1`,
     [channelId]
   );
   return messages.rows;
+};
+
+const getUserFromSessionId = async sessionId => {
+  const result = await pool.query(
+    `
+    SELECT users.id AS id, username FROM users
+      JOIN session
+      ON session.user_id = users.id
+    WHERE session.session_id = $1
+    `,
+    [sessionId]
+  );
+  const user = result.rows[0];
+  if (!user) {
+    throw new Error('User is not authenticated.');
+  }
+  return user;
 };
 
 const createUser = async (username, password) => {
@@ -25,6 +43,7 @@ const createUser = async (username, password) => {
     if (error.code === '23505') {
       throw new Error('Username is already taken.');
     }
+    console.error(error);
     throw new UnknownError();
   }
 };
@@ -49,11 +68,11 @@ const postChannels = nameChannels => {
   pool.query(`INSERT INTO channel (name) VALUES ($1)`, [nameChannels]);
 };
 
-const postMessages = (channelId, contentMessages) => {
-  pool.query(`INSERT INTO message (id_chan, content) VALUES ($1, $2)`, [
-    channelId,
-    contentMessages,
-  ]);
+const postMessages = (channelId, contentMessages, user) => {
+  pool.query(
+    `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3)`,
+    [channelId, contentMessages, user.id]
+  );
 };
 
 const deleteChannels = channelId => {
@@ -69,4 +88,5 @@ module.exports = {
   createUser,
   getVerifiedUserId,
   createSession,
+  getUserFromSessionId,
 };

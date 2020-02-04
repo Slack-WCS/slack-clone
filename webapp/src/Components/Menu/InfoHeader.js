@@ -7,7 +7,7 @@ import {
   SessionLinksContainer,
 } from '../StyledComponents/InfoHeader.style';
 
-const InfoHeader = () => {
+const InfoHeader = ({ currentUser }) => {
   return (
     <div>
       <WebsiteName>Slack-clone</WebsiteName>
@@ -19,7 +19,7 @@ const InfoHeader = () => {
 
       <div>
         <UserStatus>•</UserStatus>
-        <UserName>Nom de l'utilisateur</UserName>
+        <UserName>{currentUser.username}</UserName>
       </div>
     </div>
   );

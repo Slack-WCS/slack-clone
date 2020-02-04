@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { DASHBOARD_PATH } from '../../constants';
 import BurgerButton from './BurgerButton';
 import InfoHeader from './InfoHeader';
 import SearchBar from './SearchBar';
@@ -104,7 +105,7 @@ class Menu extends React.Component {
           {/* si isOpenMenu est égal à true on set la classe à 'is-visible-in-mobile' */}
           <LeftNavbar isOpenMenu={this.state.isOpenMenu}>
             <MenuListElements>
-              <InfoHeader />
+              <InfoHeader currentUser={this.props.currentUser} />
             </MenuListElements>
             <MenuListElements>
               <SearchBar />

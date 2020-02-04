@@ -18,13 +18,12 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.runSql(`CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    email TEXT UNIQUE NOT NULL,
     username TEXT NOT NULL,
     password TEXT NOT NULL
   )`);
 };
 exports.down = function(db) {
-  return null;
+  return db.runSql(`DROP TABLE users`);
 };
 
 exports._meta = {

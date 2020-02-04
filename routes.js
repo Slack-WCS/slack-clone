@@ -6,6 +6,8 @@ router.get('/channels/:channelId/messages', controllers.getMessages);
 
 router.get('/channels', controllers.getChannels);
 
+router.get('/whoami', controllers.getCurrentUser);
+
 // router POST
 // Authentification
 router.post('/users', controllers.createUser);
