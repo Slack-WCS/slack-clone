@@ -9,10 +9,10 @@ const getChannels = async () => {
 
 const getMessages = async channelId => {
   const messages = await pool.query(
-    // `SELECT * FROM messages WHERE id_chan = $1`,
+    // ne pas choisir users.id dans le select car il n'est pas unique alors que messages.id SI
 
     `
-    SELECT users.id, content, id_chan, username FROM messages
+    SELECT  messages.id, content, id_chan, username FROM messages
       JOIN users
       ON messages.user_id = users.id
       WHERE id_chan = $1;
