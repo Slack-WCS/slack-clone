@@ -47,12 +47,12 @@ class Channel extends React.Component {
     );
 
     const { messages } = await response.json();
+    console.log(messages);
+
     this.setState({ messages, isLoading: false });
   }
 
   postMessages = e => {
-    console.log('je suis passé par le postMessages du channel.js');
-
     fetch(`/api/channels/${this.props.channelId}/messages`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
@@ -92,7 +92,7 @@ class Channel extends React.Component {
             return (
               <Message
                 key={message.id}
-                currentUser={this.props.currentUser}
+                username={message.username}
                 content={message.content}
               />
             );
