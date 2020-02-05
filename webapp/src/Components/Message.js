@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Message = ({ currentUser }) => {
+const Message = ({ currentUser, content }) => {
   return (
     <div>
       <b>{currentUser.username}</b>
-      <p>{this.props.content}</p>
+      <p>{content}</p>
     </div>
   );
 };

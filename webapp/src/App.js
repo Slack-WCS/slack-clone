@@ -13,16 +13,11 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       method: 'GET',
     });
-    // console.log('response:' + (await response.text()));
-    // if (response.ok) {
-    //   alert('ok');
-    // } else {
-    //   alert('pas ok');
-    // }
     if (response.ok) {
       const currentUser = await response.json();
       setCurrentUser(currentUser);
     }
+
     setIsLoading(false);
   };
 

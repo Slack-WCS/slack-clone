@@ -7,7 +7,8 @@ const getChannels = async () => {
   return channels.rows;
 };
 
-const getMessages = async channelId => {
+const getMessages = async (channelId, userId) => {
+  console.log('userId du getMessages de data-access', userId);
   const messages = await pool.query(
     `SELECT * FROM messages WHERE id_chan = $1`,
     [channelId]
@@ -71,7 +72,7 @@ const postChannels = nameChannels => {
 const postMessages = (channelId, contentMessages, user) => {
   pool.query(
     `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3)`,
-    [channelId, contentMessages, user.id]
+    [channelId, contentMessages, user]
   );
 };
 
