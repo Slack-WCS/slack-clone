@@ -45,16 +45,20 @@ class Channel extends React.Component {
     const response = await fetch(
       `/api/channels/${this.props.channelId}/messages`
     );
+
     const { messages } = await response.json();
     this.setState({ messages, isLoading: false });
   }
 
   postMessages = e => {
+    console.log('je suis passé par le postMessages du channel.js');
+
     fetch(`/api/channels/${this.props.channelId}/messages`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({
         contentMessages: this.state.messageContent[0],
+        channelId: this.props.channelId,
       }),
     });
     e.preventDefault();
@@ -85,7 +89,13 @@ class Channel extends React.Component {
         </TopBarChannelName>
         <AllMessages>
           {this.state.messages.map(message => {
-            return <Message key={message.id} content={message.content} />;
+            return (
+              <Message
+                key={message.id}
+                currentUser={this.props.currentUser}
+                content={message.content}
+              />
+            );
           })}
         </AllMessages>
         <PostMessageInput onSubmit={this.postMessages}>

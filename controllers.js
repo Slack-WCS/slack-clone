@@ -9,8 +9,13 @@ const getChannels = async (req, res) => {
 const getMessages = async (req, res) => {
   // eslint-disable-next-line radix
   const channelId = parseInt(req.params.channelId);
+  // eslint-disable-next-line radix
+  const { userId } = req.params;
+  console.log(
+    `req params de getMessages du controller = ${JSON.stringify(req.params)}`
+  );
 
-  const messages = await dataAccess.getMessages(channelId);
+  const messages = await dataAccess.getMessages(channelId, userId);
   return res.status(200).json({ messages });
 };
 
@@ -32,6 +37,7 @@ const postChannels = (req, res) => {
 const postMessages = async (req, res) => {
   const { contentMessages, channelId } = req.body;
   const { user } = req;
+
   await dataAccess.postMessages(channelId, contentMessages, user.id);
 
   return res.status(201).send('Message added');
@@ -68,7 +74,7 @@ const createSession = async (req, res) => {
 
 // DELETE
 const deleteChannels = (req, res) => {
-  const { channelId } = req.params.channelId;
+  const { channelId } = req.params;
   dataAccess.deleteChannels(channelId);
   // eslint-disable-next-line no-unused-expressions
   err => {

@@ -12,10 +12,10 @@ const InfoHeader = ({ currentUser }) => {
     <div>
       <WebsiteName>Slack-clone</WebsiteName>
 
-      <SessionLinksContainer>
+      {/* <SessionLinksContainer>
         <SessionLinks to="/sign_up">Sign up</SessionLinks>
         <SessionLinks to="/log_in">Log in</SessionLinks>
-      </SessionLinksContainer>
+      </SessionLinksContainer> */}
 
       <div>
         <UserStatus>•</UserStatus>

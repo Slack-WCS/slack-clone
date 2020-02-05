@@ -13,6 +13,11 @@ const CreateChannelForm = styled(Form)`
 const DeleteChannel = styled.div`
   cursor: pointer;
   float: right;
+
+  &:hover {
+    background: red;
+    color: #333;
+  }
 `;
 const GlobalInput = styled(Input)`
   appearance: none;

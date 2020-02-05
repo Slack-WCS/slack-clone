@@ -2,6 +2,7 @@ const router = require('express').Router();
 const controllers = require('./controllers');
 
 // Messages & Channels
+
 router.get('/channels/:channelId/messages', controllers.getMessages);
 
 router.get('/channels', controllers.getChannels);
