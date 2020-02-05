@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const dataAccess = require('./data-access');
 
 // GET
@@ -7,15 +8,10 @@ const getChannels = async (req, res) => {
 };
 
 const getMessages = async (req, res) => {
-  // eslint-disable-next-line radix
   const channelId = parseInt(req.params.channelId);
-  // eslint-disable-next-line radix
-  const { userId } = req.params;
-  console.log(
-    `req params de getMessages du controller = ${JSON.stringify(req.params)}`
-  );
 
-  const messages = await dataAccess.getMessages(channelId, userId);
+  const messages = await dataAccess.getMessages(channelId);
+
   return res.status(200).json({ messages });
 };
 

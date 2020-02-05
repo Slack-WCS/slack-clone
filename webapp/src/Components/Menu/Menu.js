@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import { DASHBOARD_PATH } from '../../constants';
 import BurgerButton from './BurgerButton';
 import InfoHeader from './InfoHeader';
 import SearchBar from './SearchBar';
@@ -232,9 +231,7 @@ class Menu extends React.Component {
             path="/channels/:channelId/messages"
             render={props => (
               <Channel
-                currentUser={this.props.currentUser}
                 channelId={props.match.params.channelId}
-                userId={props.match.params.userId}
                 chanName={this.getChanName(props.match.params.channelId)}
               />
             )}

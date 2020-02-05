@@ -7,10 +7,16 @@ const getChannels = async () => {
   return channels.rows;
 };
 
-const getMessages = async (channelId, userId) => {
-  console.log('userId du getMessages de data-access', userId);
+const getMessages = async channelId => {
   const messages = await pool.query(
-    `SELECT * FROM messages WHERE id_chan = $1`,
+    // `SELECT * FROM messages WHERE id_chan = $1`,
+
+    `
+    SELECT users.id, content, id_chan, username FROM messages
+      JOIN users
+      ON messages.user_id = users.id
+      WHERE id_chan = $1;
+    `,
     [channelId]
   );
   return messages.rows;
