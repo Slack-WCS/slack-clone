@@ -18,6 +18,7 @@ class Channel extends React.Component {
     messages: [],
     messageContent: '',
     shouldRefetchMessages: false,
+    errorSendingMessage: false,
   };
 
   componentDidMount() {
@@ -47,22 +48,40 @@ class Channel extends React.Component {
     );
 
     const { messages } = await response.json();
-    console.log(messages);
 
     this.setState({ messages, isLoading: false });
   }
 
-  createMessage = e => {
-    fetch(`/api/channels/${this.props.channelId}/messages`, {
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-      body: JSON.stringify({
-        contentMessage: this.state.messageContent[0],
-        channelId: this.props.channelId,
-      }),
-    });
+  showErrorSendingMessage = () => {
+    this.setState({ errorSendingMessage: true });
+  };
+
+  sendMessage = async e => {
     e.preventDefault();
-    this.setState({ shouldRefetchMessages: true, messageContent: '' });
+    try {
+      const response = await fetch(
+        `/api/channels/${this.props.channelId}/messages`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          body: JSON.stringify({
+            contentMessage: this.state.messageContent[0],
+            channelId: this.props.channelId,
+          }),
+        }
+      );
+      if (response.ok) {
+        this.setState({
+          shouldRefetchMessages: true,
+          messageContent: '',
+          errorSendingMessage: false,
+        });
+      } else {
+        this.showErrorSendingMessage();
+      }
+    } catch {
+      this.showErrorSendingMessage();
+    }
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -98,9 +117,15 @@ class Channel extends React.Component {
             );
           })}
         </AllMessages>
-        <PostMessageInput onSubmit={this.createMessage}>
+        <PostMessageInput onSubmit={this.sendMessage}>
           <InputGroup>
+            {this.state.errorSendingMessage && (
+              <div data-selector="error-sending-message">
+                Message non envoyé – veuillez réessayer
+              </div>
+            )}
             <GlobalInput
+              data-selector="sendMessageTextInput"
               placeholder="Write a message"
               type="text"
               value={this.state.messageContent}
