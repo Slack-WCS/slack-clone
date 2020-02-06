@@ -7,7 +7,9 @@ npx db-migrate create nameOfMigration
 How to execute migrations :
 
 ```
-npx db-migrate up
+npm run migrate
 ```
 
 Ne pas oublier de lancer le front: webApp et le back !
+
+Créer un fichier `.env` à partir de `.env.example`.
