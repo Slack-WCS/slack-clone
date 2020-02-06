@@ -56,6 +56,7 @@ class Menu extends React.Component {
       if (chan.id === parseInt(idChan)) {
         return chan.name;
       }
+      return '';
     });
     return res;
   };
@@ -67,7 +68,7 @@ class Menu extends React.Component {
     this.setState({ channels, shouldRefreshChannels: false });
   };
 
-  postChannels = e => {
+  createChannel = e => {
     fetch('/api/channels', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
@@ -113,7 +114,7 @@ class Menu extends React.Component {
             <MenuListElements>
               <ul>
                 <li>
-                  <CreateChannelForm onSubmit={this.postChannels}>
+                  <CreateChannelForm onSubmit={this.createChannel}>
                     <InputGroup>
                       <GlobalInput
                         placeholder="Create channel"

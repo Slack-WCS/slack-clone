@@ -15,7 +15,8 @@ const getMessages = async channelId => {
     SELECT  messages.id, content, id_chan, username FROM messages
       JOIN users
       ON messages.user_id = users.id
-      WHERE id_chan = $1;
+      WHERE id_chan = $1
+      ORDER BY messages.created_at;
     `,
     [channelId]
   );
@@ -71,14 +72,14 @@ const createSession = async userId => {
   return result.rows[0].session_id;
 };
 
-const postChannels = nameChannels => {
+const createChannel = nameChannels => {
   pool.query(`INSERT INTO channel (name) VALUES ($1)`, [nameChannels]);
 };
 
-const postMessages = (channelId, contentMessages, user) => {
-  pool.query(
+const createMessage = async (channelId, contentMessage, user) => {
+  await pool.query(
     `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3)`,
-    [channelId, contentMessages, user]
+    [channelId, contentMessage, user]
   );
 };
 
@@ -89,8 +90,8 @@ const deleteChannels = channelId => {
 module.exports = {
   getChannels,
   getMessages,
-  postChannels,
-  postMessages,
+  createChannel,
+  createMessage,
   deleteChannels,
   createUser,
   getVerifiedUserId,

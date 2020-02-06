@@ -52,12 +52,12 @@ class Channel extends React.Component {
     this.setState({ messages, isLoading: false });
   }
 
-  postMessages = e => {
+  createMessage = e => {
     fetch(`/api/channels/${this.props.channelId}/messages`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({
-        contentMessages: this.state.messageContent[0],
+        contentMessage: this.state.messageContent[0],
         channelId: this.props.channelId,
       }),
     });
@@ -98,7 +98,7 @@ class Channel extends React.Component {
             );
           })}
         </AllMessages>
-        <PostMessageInput onSubmit={this.postMessages}>
+        <PostMessageInput onSubmit={this.createMessage}>
           <InputGroup>
             <GlobalInput
               placeholder="Write a message"
