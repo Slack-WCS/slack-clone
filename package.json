@@ -6,10 +6,17 @@
   "scripts": {
     "start": "node .",
     "start:watch": "nodemon .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:server": "DATABASE_URL=postgres://slack_clone_test_user:123456@localhost:5432/slack_clone_test jest",
+    "test": "npm run test-server && cd webapp && npm test",
     "build": "npm run migrate & npm run build-webapp",
     "build-webapp": "cd webapp && npm install && npm run build",
     "migrate": "db-migrate up --config db-migrate-config.js --env pg"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "webapp",
+      "webappmobile"
+    ]
   },
   "author": "",
   "license": "ISC",
@@ -35,10 +42,12 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^3.0.9",
+    "jest": "^25.1.0",
     "lint-staged": "^9.4.2",
     "nodemon": "^1.19.3",
     "prettier": "^1.19.1",
-    "prettierrc": "0.0.0-5"
+    "prettierrc": "0.0.0-5",
+    "util": "^0.12.1"
   },
   "husky": {
     "hooks": {

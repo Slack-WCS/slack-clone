@@ -16,9 +16,9 @@ router.post('/users', controllers.createUser);
 router.post('/sessions', controllers.createSession);
 
 // Channels & messages
-router.post('/channels', controllers.postChannels);
+router.post('/channels', controllers.createChannel);
 
-router.post('/channels/:channelId/messages', controllers.postMessages);
+router.post('/channels/:channelId/messages', controllers.createMessage);
 
 // router DELETE
 router.delete('/channels/:channelId', controllers.deleteChannels);

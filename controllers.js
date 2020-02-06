@@ -24,17 +24,17 @@ const getCurrentUser = (req, res) => {
 };
 
 // POST
-const postChannels = (req, res) => {
+const createChannel = (req, res) => {
   const { nameChannels } = req.body;
-  dataAccess.postChannels(nameChannels);
+  dataAccess.createChannel(nameChannels);
   return res.send('channel posté');
 };
 
-const postMessages = async (req, res) => {
-  const { contentMessages, channelId } = req.body;
+const createMessage = async (req, res) => {
+  const { contentMessage, channelId } = req.body;
   const { user } = req;
 
-  await dataAccess.postMessages(channelId, contentMessages, user.id);
+  await dataAccess.createMessage(channelId, contentMessage, user.id);
 
   return res.status(201).send('Message added');
 };
@@ -87,8 +87,8 @@ const deleteChannels = (req, res) => {
 module.exports = {
   getChannels,
   getMessages,
-  postChannels,
-  postMessages,
+  createChannel,
+  createMessage,
   deleteChannels,
   createUser,
   createSession,

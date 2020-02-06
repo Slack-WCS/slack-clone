@@ -1,13 +1,14 @@
-'use strict';
-
-var dbm;
-var type;
-var seed;
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable func-names */
+/* eslint-disable no-unused-vars */
+let dbm;
+let type;
+let seed;
 
 /**
-  * We receive the dbmigrate dependency from dbmigrate initially.
-  * This enables us to not have to rely on NODE_PATH.
-  */
+ * We receive the dbmigrate dependency from dbmigrate initially.
+ * This enables us to not have to rely on NODE_PATH.
+ */
 exports.setup = function(options, seedLink) {
   dbm = options.dbmigrate;
   type = dbm.dataType;
@@ -15,7 +16,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`INSERT INTO message (content, id_chan) VALUES
+  return db.runSql(`INSERT INTO messages (content, id_chan) VALUES
     ('1er message chan 1', '1'),
     ('2e message chan 1', '1'),
     ('3e message chan 1', '1'),
@@ -32,5 +33,5 @@ exports.down = function(db) {
 };
 
 exports._meta = {
-  "version": 1
+  version: 1,
 };

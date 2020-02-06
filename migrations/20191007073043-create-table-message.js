@@ -32,7 +32,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return db.runSql(`DROP TABLE message`);
+  return db.runSql(`DROP TABLE messages`);
 };
 
 exports._meta = {
