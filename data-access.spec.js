@@ -1,5 +1,6 @@
 const pg = require('pg');
 const util = require('util');
+const { omit } = require('lodash');
 // Use exec as a promise to be able to await it
 const exec = util.promisify(require('child_process').exec);
 
@@ -54,27 +55,28 @@ describe('getMessages', () => {
     await dataAccess.createMessage(1, 'salut', arnaudId);
 
     const messages = await dataAccess.getMessages(1);
-    expect(messages).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "content": "bonjour",
-    "id": 9,
-    "id_chan": 1,
-    "username": "arnaud",
-  },
-  Object {
-    "content": "hello",
-    "id": 10,
-    "id_chan": 1,
-    "username": "monia",
-  },
-  Object {
-    "content": "salut",
-    "id": 11,
-    "id_chan": 1,
-    "username": "arnaud",
-  },
-]
-`);
+    expect(messages.map(message => omit(message, ['created_at'])))
+      .toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "content": "salut",
+          "id": 11,
+          "id_chan": 1,
+          "username": "arnaud",
+        },
+        Object {
+          "content": "hello",
+          "id": 10,
+          "id_chan": 1,
+          "username": "monia",
+        },
+        Object {
+          "content": "bonjour",
+          "id": 9,
+          "id_chan": 1,
+          "username": "arnaud",
+        },
+      ]
+    `);
   });
 });

@@ -7,20 +7,29 @@ const getChannels = async () => {
   return channels.rows;
 };
 
-const getMessages = async channelId => {
+const getMessages = async (channelId, offset) => {
   const messages = await pool.query(
     // ne pas choisir users.id dans le select car il n'est pas unique alors que messages.id SI
 
     `
-    SELECT  messages.id, content, id_chan, username FROM messages
+    SELECT 
+    messages.id, 
+    content, 
+    id_chan, 
+    created_at, 
+    username, 
+    COUNT(*) OVER() AS total_count 
+    FROM messages
       JOIN users
       ON messages.user_id = users.id
       WHERE id_chan = $1
-      ORDER BY messages.created_at;
+      ORDER BY messages.created_at DESC
+      LIMIT 10 OFFSET $2;
     `,
-    [channelId]
+    [channelId, offset]
   );
-  return messages.rows;
+
+  return { messages: messages.rows, totalCount: messages.rows[0].total_count };
 };
 
 const getUserFromSessionId = async sessionId => {

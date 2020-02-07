@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import AuthenticationForm from './Components/AuthentificationForm';
 import Menu from './Components/Menu/Menu';
-import { DASHBOARD_PATH } from './constants';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
