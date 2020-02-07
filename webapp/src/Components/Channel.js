@@ -11,21 +11,28 @@ import {
 import { GlobalInput } from './StyledComponents/Menu.style';
 
 class Channel extends React.Component {
-  state = {
-    chanName: this.props.chanName,
-    channelId: this.props.channelId,
-    isLoading: true,
-    messages: [],
-    messageContent: '',
-    shouldRefetchMessages: false,
-    errorSendingMessage: false,
-  };
+  constructor(props) {
+    super(props);
+    this.messagesRef = React.createRef();
+    this.state = {
+      chanName: this.props.chanName,
+      channelId: this.props.channelId,
+      isLoading: true,
+      messages: [],
+      messageContent: '',
+      shouldRefetchMessages: false,
+      errorSendingMessage: false,
+      shouldScrollToMostRecent: false,
+      nextPage: 1,
+    };
+  }
 
   componentDidMount() {
     this.getMessages();
   }
 
   componentDidUpdate() {
+    this.scrollToMostRecent();
     if (this.state.shouldRefetchMessages) {
       this.setState({ shouldRefetchMessages: false });
       this.getMessages();
@@ -38,18 +45,30 @@ class Channel extends React.Component {
     });
   };
 
+  scrollToMostRecent = () => {
+    if (this.state.shouldScrollToMostRecent) {
+      this.messagesRef.current.scrollTop = this.messagesRef.current.scrollHeight;
+      this.setState({ shouldScrollToMostRecent: false });
+    }
+  };
+
   async getMessages() {
     this.setState({
       shouldRefetchMessages: false,
     });
 
     const response = await fetch(
-      `/api/channels/${this.props.channelId}/messages`
+      `/api/channels/${this.props.channelId}/messages?page=${this.state.nextPage}`
     );
 
-    const { messages } = await response.json();
+    const { messages, nextPage } = await response.json();
 
-    this.setState({ messages, isLoading: false });
+    this.setState({
+      messages: [...this.state.messages, ...messages],
+      isLoading: false,
+      shouldScrollToMostRecent: true,
+      nextPage,
+    });
   }
 
   showErrorSendingMessage = () => {
@@ -71,8 +90,12 @@ class Channel extends React.Component {
         }
       );
       if (response.ok) {
+        const messageAdded = [
+          { content: this.state.value, created_at: new Date(), username: '' },
+          ...this.state.messages,
+        ];
         this.setState({
-          shouldRefetchMessages: true,
+          messages: messageAdded,
           messageContent: '',
           errorSendingMessage: false,
         });
@@ -82,6 +105,10 @@ class Channel extends React.Component {
     } catch {
       this.showErrorSendingMessage();
     }
+  };
+
+  fetchPreviousMessages = () => {
+    this.getMessages();
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -106,16 +133,24 @@ class Channel extends React.Component {
         <TopBarChannelName>
           <ChannelName>{this.state.chanName}</ChannelName>
         </TopBarChannelName>
-        <AllMessages>
+        <AllMessages ref={this.messagesRef}>
           {this.state.messages.map(message => {
             return (
               <Message
                 key={message.id}
                 username={message.username}
                 content={message.content}
+                createdAt={message.created_at}
               />
             );
           })}
+          <div>
+            {this.state.nextPage ? (
+              <button onClick={this.fetchPreviousMessages}>
+                Charger les messages précédents
+              </button>
+            ) : null}
+          </div>
         </AllMessages>
         <PostMessageInput onSubmit={this.sendMessage}>
           <InputGroup>

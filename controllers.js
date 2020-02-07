@@ -9,10 +9,16 @@ const getChannels = async (req, res) => {
 
 const getMessages = async (req, res) => {
   const channelId = parseInt(req.params.channelId);
+  const page = parseInt(req.query.page);
+  const offset = (page - 1) * 10;
 
-  const messages = await dataAccess.getMessages(channelId);
-
-  return res.status(200).json({ messages });
+  const messagesWithCount = await dataAccess.getMessages(channelId, offset);
+  if (page * 10 >= messagesWithCount.totalCount) {
+    messagesWithCount.nextPage = null;
+  } else {
+    messagesWithCount.nextPage = page + 1;
+  }
+  return res.status(200).json(messagesWithCount);
 };
 
 const getCurrentUser = (req, res) => {

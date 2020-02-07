@@ -47,6 +47,8 @@ const AllMessages = styled.div`
   padding: 10px;
   max-height: calc(100vh - 14vh - 37px);
   overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
 `;
 
 const PostMessageInput = styled.form`
