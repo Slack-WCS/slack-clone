@@ -66,7 +66,7 @@ class Channel extends React.Component {
     this.setState({
       messages: [...this.state.messages, ...messages],
       isLoading: false,
-      shouldScrollToMostRecent: true,
+      shouldScrollToMostRecent: false,
       nextPage,
     });
   }
@@ -99,6 +99,7 @@ class Channel extends React.Component {
           messages: messages,
           messageContent: '',
           errorSendingMessage: false,
+          shouldScrollToMostRecent: true,
         });
       } else {
         this.showErrorSendingMessage();
