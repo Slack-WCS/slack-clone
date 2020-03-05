@@ -42,9 +42,13 @@ const createMessage = async (req, res) => {
   const { contentMessage, channelId } = req.body;
   const { user } = req;
 
-  await dataAccess.createMessage(channelId, contentMessage, user.id);
+  const result = await dataAccess.createMessage(
+    channelId,
+    contentMessage,
+    user.id
+  );
 
-  return res.status(201).send('Message added');
+  return res.status(201).send(result);
 };
 
 const getCleanPassword = password => {

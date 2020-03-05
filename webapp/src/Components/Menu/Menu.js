@@ -232,6 +232,7 @@ class Menu extends React.Component {
             path="/channels/:channelId/messages"
             render={props => (
               <Channel
+                currentUser={this.props.currentUser}
                 channelId={props.match.params.channelId}
                 chanName={this.getChanName(props.match.params.channelId)}
               />
