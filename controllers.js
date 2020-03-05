@@ -7,13 +7,15 @@ const getChannels = async (req, res) => {
   return res.status(200).json({ channels });
 };
 
+const MESSAGES_PAGE_SIZE = 10;
+
 const getMessages = async (req, res) => {
   const channelId = parseInt(req.params.channelId);
   const page = parseInt(req.query.page);
-  const offset = (page - 1) * 10;
+  const offset = (page - 1) * MESSAGES_PAGE_SIZE;
 
   const messagesWithCount = await dataAccess.getMessages(channelId, offset);
-  if (page * 10 >= messagesWithCount.totalCount) {
+  if (page * MESSAGES_PAGE_SIZE >= messagesWithCount.totalCount) {
     messagesWithCount.nextPage = null;
   } else {
     messagesWithCount.nextPage = page + 1;
@@ -30,9 +32,9 @@ const getCurrentUser = (req, res) => {
 };
 
 // POST
-const createChannel = (req, res) => {
+const createChannel = async (req, res) => {
   const { nameChannels } = req.body;
-  dataAccess.createChannel(nameChannels);
+  await dataAccess.createChannel(nameChannels);
   return res.send('channel posté');
 };
 

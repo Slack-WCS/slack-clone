@@ -81,8 +81,8 @@ const createSession = async userId => {
   return result.rows[0].session_id;
 };
 
-const createChannel = nameChannels => {
-  pool.query(`INSERT INTO channel (name) VALUES ($1)`, [nameChannels]);
+const createChannel = async nameChannels => {
+  await pool.query(`INSERT INTO channel (name) VALUES ($1)`, [nameChannels]);
 };
 
 const createMessage = async (channelId, contentMessage, user) => {

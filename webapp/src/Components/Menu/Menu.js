@@ -70,15 +70,15 @@ class Menu extends React.Component {
     this.setState({ channels, shouldRefreshChannels: false });
   };
 
-  createChannel = e => {
-    fetch('/api/channels', {
+  createChannel = async e => {
+    e.preventDefault();
+    await fetch('/api/channels', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({
         nameChannels: this.state.nameChannels[0],
       }),
     });
-    e.preventDefault();
     this.setState({ shouldRefreshChannels: true, nameChannels: '' });
   };
 
