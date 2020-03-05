@@ -121,6 +121,8 @@ class Channel extends React.Component {
         channelId: nextProps.channelId,
         chanName: nextProps.chanName,
         shouldRefetchMessages: true,
+        messages: [],
+        nextPage: 1,
       };
     }
     return null;
