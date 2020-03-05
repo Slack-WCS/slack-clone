@@ -80,8 +80,8 @@ class Menu extends React.Component {
     this.setState({ shouldRefreshChannels: true, nameChannels: '' });
   };
 
-  deleteChannels = channelId => {
-    fetch(`/api/channels/${channelId}/`, {
+  deleteChannels = async channelId => {
+    await fetch(`/api/channels/${channelId}/`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'DELETE',
     });

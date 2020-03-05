@@ -28,8 +28,10 @@ const getMessages = async (channelId, offset) => {
     `,
     [channelId, offset]
   );
-
-  return { messages: messages.rows, totalCount: messages.rows[0].total_count };
+  return {
+    messages: messages.rows,
+    totalCount: messages.rows.length ? messages.rows[0].total_count : 0,
+  };
 };
 
 const getUserFromSessionId = async sessionId => {
@@ -92,8 +94,8 @@ const createMessage = async (channelId, contentMessage, user) => {
   );
 };
 
-const deleteChannels = channelId => {
-  pool.query(`DELETE FROM channel WHERE id = $1`, [channelId]);
+const deleteChannels = async channelId => {
+  await pool.query(`DELETE FROM channel WHERE id = $1`, [channelId]);
 };
 
 module.exports = {

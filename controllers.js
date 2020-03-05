@@ -77,19 +77,11 @@ const createSession = async (req, res) => {
 };
 
 // DELETE
-const deleteChannels = (req, res) => {
+const deleteChannels = async (req, res) => {
   const { channelId } = req.params;
-  dataAccess.deleteChannels(channelId);
-  // eslint-disable-next-line no-unused-expressions
-  err => {
-    if (err) {
-      // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
-      res.status(500).send('Erreur lors de la suppression des users');
-    } else {
-      // Si tout s'est bien passé, on envoie un statut "ok".
-      res.sendStatus(200);
-    }
-  };
+  await dataAccess.deleteChannels(channelId);
+  // Si tout s'est bien passé, on envoie un statut "ok".
+  res.sendStatus(200);
 };
 
 module.exports = {
