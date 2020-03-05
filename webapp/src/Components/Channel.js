@@ -90,19 +90,21 @@ class Channel extends React.Component {
         }
       );
       if (response.ok) {
-        const messageAdded = [
-          { content: this.state.value, created_at: new Date(), username: '' },
+        const data = await response.json();
+        const messages = [
+          { ...data, username: this.props.currentUser.username },
           ...this.state.messages,
         ];
         this.setState({
-          messages: messageAdded,
+          messages: messages,
           messageContent: '',
           errorSendingMessage: false,
         });
       } else {
         this.showErrorSendingMessage();
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
       this.showErrorSendingMessage();
     }
   };

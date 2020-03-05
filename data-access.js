@@ -88,10 +88,12 @@ const createChannel = async nameChannels => {
 };
 
 const createMessage = async (channelId, contentMessage, user) => {
-  await pool.query(
-    `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3)`,
+  const result = await pool.query(
+    `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3) RETURNING *`,
     [channelId, contentMessage, user]
   );
+  console.log(result);
+  return result.rows[0];
 };
 
 const deleteChannels = async channelId => {
