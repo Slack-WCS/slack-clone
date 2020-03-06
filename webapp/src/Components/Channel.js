@@ -29,6 +29,17 @@ class Channel extends React.Component {
 
   componentDidMount() {
     this.getMessages();
+    const socket = new WebSocket('ws://127.0.0.1:8000/');
+    socket.onmessage = msg => {
+      const event = JSON.parse(msg.data);
+      console.log(event);
+      if (
+        event.type === 'MESSAGE_CREATED' &&
+        parseInt(this.state.channelId) === event.payload.id_chan
+      ) {
+        this.setState({ messages: [event.payload, ...this.state.messages] });
+      }
+    };
   }
 
   componentDidUpdate() {
@@ -90,13 +101,7 @@ class Channel extends React.Component {
         }
       );
       if (response.ok) {
-        const data = await response.json();
-        const messages = [
-          { ...data, username: this.props.currentUser.username },
-          ...this.state.messages,
-        ];
         this.setState({
-          messages: messages,
           messageContent: '',
           errorSendingMessage: false,
           shouldScrollToMostRecent: true,

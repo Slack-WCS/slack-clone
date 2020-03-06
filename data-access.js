@@ -96,6 +96,26 @@ const createMessage = async (channelId, contentMessage, user) => {
   return result.rows[0];
 };
 
+const getMessage = async messageId => {
+  const result = await pool.query(
+    `
+    SELECT
+      messages.id, 
+      content, 
+      id_chan, 
+      created_at, 
+      username
+    FROM messages
+    JOIN users
+    ON users.id = messages.user_id
+    WHERE messages.id = $1
+  `,
+    [messageId]
+  );
+  console.log(result.rows[0]);
+  return result.rows[0];
+};
+
 const deleteChannels = async channelId => {
   await pool.query(`DELETE FROM channel WHERE id = $1`, [channelId]);
 };
@@ -110,4 +130,5 @@ module.exports = {
   getVerifiedUserId,
   createSession,
   getUserFromSessionId,
+  getMessage,
 };
