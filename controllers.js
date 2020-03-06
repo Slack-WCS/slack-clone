@@ -1,5 +1,6 @@
 /* eslint-disable radix */
 const dataAccess = require('./data-access');
+const { EVENTS, eventEmitter } = require('./events');
 
 // GET
 const getChannels = async (req, res) => {
@@ -42,12 +43,15 @@ const createMessage = async (req, res) => {
   const { contentMessage, channelId } = req.body;
   const { user } = req;
 
-  const result = await dataAccess.createMessage(
+  const { id } = await dataAccess.createMessage(
     channelId,
     contentMessage,
     user.id
   );
 
+  const result = await dataAccess.getMessage(id);
+
+  eventEmitter.emit(EVENTS.MESSAGE_CREATED, result);
   return res.status(201).send(result);
 };
 
