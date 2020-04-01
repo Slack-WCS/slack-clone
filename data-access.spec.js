@@ -27,7 +27,7 @@ const migrateDatabase = async () => {
 };
 
 describe('getChannels', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await resetDatabase();
     await migrateDatabase();
   });
@@ -54,26 +54,29 @@ describe('getMessages', () => {
     await dataAccess.createMessage(1, 'hello', moniaId);
     await dataAccess.createMessage(1, 'salut', arnaudId);
 
-    const messages = await dataAccess.getMessages(1);
-    expect(messages.map(message => omit(message, ['created_at'])))
+    const result = await dataAccess.getMessages(1);
+    expect(result.messages.map(message => omit(message, ['created_at'])))
       .toMatchInlineSnapshot(`
       Array [
         Object {
           "content": "salut",
           "id": 11,
           "id_chan": 1,
+          "total_count": "3",
           "username": "arnaud",
         },
         Object {
           "content": "hello",
           "id": 10,
           "id_chan": 1,
+          "total_count": "3",
           "username": "monia",
         },
         Object {
           "content": "bonjour",
           "id": 9,
           "id_chan": 1,
+          "total_count": "3",
           "username": "arnaud",
         },
       ]

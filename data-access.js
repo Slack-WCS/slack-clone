@@ -92,7 +92,6 @@ const createMessage = async (channelId, contentMessage, user) => {
     `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3) RETURNING *`,
     [channelId, contentMessage, user]
   );
-  console.log(result);
   return result.rows[0];
 };
 
@@ -112,12 +111,18 @@ const getMessage = async messageId => {
   `,
     [messageId]
   );
-  console.log(result.rows[0]);
+  if (!result.rows.length) {
+    return null;
+  }
   return result.rows[0];
 };
 
 const deleteChannels = async channelId => {
   await pool.query(`DELETE FROM channel WHERE id = $1`, [channelId]);
+};
+
+const deleteMessage = async id => {
+  await pool.query(`DELETE FROM messages WHERE id = $1`, [id]);
 };
 
 module.exports = {
@@ -131,4 +136,5 @@ module.exports = {
   createSession,
   getUserFromSessionId,
   getMessage,
+  deleteMessage,
 };
