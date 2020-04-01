@@ -32,7 +32,6 @@ class Channel extends React.Component {
     const socket = new WebSocket('ws://127.0.0.1:8000/');
     socket.onmessage = msg => {
       const event = JSON.parse(msg.data);
-      console.log(event);
       if (
         event.type === 'MESSAGE_CREATED' &&
         parseInt(this.state.channelId) === event.payload.id_chan

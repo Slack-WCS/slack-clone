@@ -23,6 +23,8 @@ router.post('/channels/:channelId/messages', controllers.createMessage);
 // router DELETE
 router.delete('/channels/:channelId', controllers.deleteChannels);
 
+router.delete('/messages/:id', controllers.deleteMessage);
+
 // Route tests
 
 // router.get('/channels/:channelId/messages', (req, res) => {
