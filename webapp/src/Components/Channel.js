@@ -150,6 +150,9 @@ class Channel extends React.Component {
                 username={message.username}
                 content={message.content}
                 createdAt={message.created_at}
+                extraInfo={
+                  message.extra_info ? JSON.parse(message.extra_info) : {}
+                }
               />
             );
           })}

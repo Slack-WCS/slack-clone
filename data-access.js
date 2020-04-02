@@ -13,12 +13,13 @@ const getMessages = async (channelId, offset) => {
 
     `
     SELECT 
-    messages.id, 
-    content, 
-    id_chan, 
-    created_at, 
-    username, 
-    COUNT(*) OVER() AS total_count 
+      messages.id, 
+      content, 
+      id_chan, 
+      created_at, 
+      username,
+      extra_info,
+      COUNT(*) OVER() AS total_count 
     FROM messages
       JOIN users
       ON messages.user_id = users.id
@@ -87,10 +88,10 @@ const createChannel = async nameChannels => {
   await pool.query(`INSERT INTO channel (name) VALUES ($1)`, [nameChannels]);
 };
 
-const createMessage = async (channelId, contentMessage, user) => {
+const createMessage = async (channelId, contentMessage, user, extraInfo) => {
   const result = await pool.query(
-    `INSERT INTO messages (id_chan, content, user_id) VALUES ($1, $2, $3) RETURNING *`,
-    [channelId, contentMessage, user]
+    `INSERT INTO messages (id_chan, content, user_id, extra_info) VALUES ($1, $2, $3, $4) RETURNING *`,
+    [channelId, contentMessage, user, extraInfo]
   );
   return result.rows[0];
 };
@@ -103,7 +104,8 @@ const getMessage = async messageId => {
       content, 
       id_chan,
       created_at, 
-      username
+      username,
+      extra_info
     FROM messages
     JOIN users
     ON users.id = messages.user_id
