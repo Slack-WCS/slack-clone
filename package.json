@@ -24,6 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
     "cookie-parser": "^1.4.4",
     "db-migrate": "^0.11.6",
     "db-migrate-pg": "^1.0.0",
@@ -32,6 +33,7 @@
     "express-ws": "^4.0.0",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0",
     "pg": "^7.12.1",
     "ws": "^7.2.1"
   },

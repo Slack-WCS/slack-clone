@@ -50,9 +50,14 @@ describe('getMessages', () => {
     await dataAccess.createUser('monia', '');
     const moniaId = await dataAccess.getVerifiedUserId('monia', '');
 
-    await dataAccess.createMessage(1, 'bonjour', arnaudId);
-    await dataAccess.createMessage(1, 'hello', moniaId);
-    await dataAccess.createMessage(1, 'salut', arnaudId);
+    await dataAccess.createMessage(
+      1,
+      'bonjour',
+      arnaudId,
+      '{"title": "Newspaper"}'
+    );
+    await dataAccess.createMessage(1, 'hello', moniaId, '{}');
+    await dataAccess.createMessage(1, 'salut', arnaudId, '{}');
 
     const result = await dataAccess.getMessages(1);
     expect(result.messages.map(message => omit(message, ['created_at'])))
@@ -60,6 +65,7 @@ describe('getMessages', () => {
       Array [
         Object {
           "content": "salut",
+          "extra_info": "{}",
           "id": 11,
           "id_chan": 1,
           "total_count": "3",
@@ -67,6 +73,7 @@ describe('getMessages', () => {
         },
         Object {
           "content": "hello",
+          "extra_info": "{}",
           "id": 10,
           "id_chan": 1,
           "total_count": "3",
@@ -74,6 +81,7 @@ describe('getMessages', () => {
         },
         Object {
           "content": "bonjour",
+          "extra_info": "{\\"title\\": \\"Newspaper\\"}",
           "id": 9,
           "id_chan": 1,
           "total_count": "3",
