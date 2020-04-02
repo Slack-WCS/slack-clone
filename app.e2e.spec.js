@@ -31,15 +31,23 @@ const migrateDatabase = async () => {
 
 describe('App', () => {
   let myMessage;
+  let messageFromUser2;
   let mySessionId;
 
   beforeEach(async () => {
     await resetDatabase();
     await migrateDatabase();
     await dataAccess.createUser('me', 'myPassword');
+    await dataAccess.createUser('user2', 'myPassword');
     const myUserId = await dataAccess.getVerifiedUserId('me', 'myPassword');
+    const user2Id = await dataAccess.getVerifiedUserId('user2', 'myPassword');
     mySessionId = await dataAccess.createSession(myUserId);
     myMessage = await dataAccess.createMessage(1, 'myMessage', myUserId);
+    messageFromUser2 = await dataAccess.createMessage(
+      1,
+      'message from user2',
+      user2Id
+    );
   });
 
   describe('DELETE /api/messages', () => {
@@ -55,11 +63,24 @@ describe('App', () => {
     });
 
     describe('when the user does not own the message', () => {
-      it('responds with 403 and does not delete the message', () => {});
+      it('responds with 403 and does not delete the message', async done => {
+        const response = await agent
+          .delete(`/api/messages/${messageFromUser2.id}`)
+          .set('Cookie', `sessionId=${mySessionId}`);
+        expect(response.status).toEqual(403);
+        expect(await dataAccess.getMessage(messageFromUser2.id)).toBeTruthy();
+        done();
+      });
     });
 
     describe('when the message does not exist', () => {
-      it('responds with 404', () => {});
+      it('responds with 404', async done => {
+        const response = await agent
+          .delete(`/api/messages/78`)
+          .set('Cookie', `sessionId=${mySessionId}`);
+        expect(response.status).toEqual(404);
+        done();
+      });
     });
   });
 });

@@ -101,7 +101,7 @@ const getMessage = async messageId => {
     SELECT
       messages.id, 
       content, 
-      id_chan, 
+      id_chan,
       created_at, 
       username
     FROM messages
@@ -115,6 +115,20 @@ const getMessage = async messageId => {
     return null;
   }
   return result.rows[0];
+};
+
+const doesMessageBelongToUser = async (messageId, userId) => {
+  const result = await pool.query(
+    `SELECT EXISTS(
+    SELECT *
+    FROM messages
+    WHERE messages.id = $1 AND user_id = $2
+  )`,
+    [messageId, userId]
+  );
+  const messageBelongsToUser = result.rows[0].exists;
+  console.log('>>>> booléen ?', result.rows[0].exists);
+  return messageBelongsToUser;
 };
 
 const deleteChannels = async channelId => {
@@ -137,4 +151,5 @@ module.exports = {
   getUserFromSessionId,
   getMessage,
   deleteMessage,
+  doesMessageBelongToUser,
 };

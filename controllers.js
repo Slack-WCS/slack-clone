@@ -93,9 +93,21 @@ const deleteChannels = async (req, res) => {
 };
 
 const deleteMessage = async (req, res) => {
-  const { id } = req.params;
-  await dataAccess.deleteMessage(id);
-  res.sendStatus(200);
+  const { id: messageId } = req.params;
+  const doesMessageExist = !!(await dataAccess.getMessage(messageId));
+  if (!doesMessageExist) {
+    return res.sendStatus(404);
+  }
+  const { id: userId } = req.user;
+  const shouldDelete = await dataAccess.doesMessageBelongToUser(
+    messageId,
+    userId
+  );
+  if (!shouldDelete) {
+    return res.sendStatus(403);
+  }
+  await dataAccess.deleteMessage(messageId);
+  return res.sendStatus(200);
 };
 
 module.exports = {
