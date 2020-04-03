@@ -6,8 +6,16 @@ const getPrintableDate = dateAsString => {
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 };
 
-const Message = ({ username, content, createdAt, extraInfo, isOwner }) => (
-  <div>
+const Message = ({
+  id,
+  username,
+  content,
+  createdAt,
+  extraInfo,
+  isOwner,
+  deleteMessage,
+}) => (
+  <div data-selector={`message-${id}`}>
     <div>{getPrintableDate(createdAt)}</div>
     <b>{username}</b>
     <p>{content}</p>
@@ -18,6 +26,7 @@ const Message = ({ username, content, createdAt, extraInfo, isOwner }) => (
     )}
     {isOwner && (
       <DeleteButton
+        onClick={deleteMessage}
         dataSelector="message-delete-button"
         altText="Delete message"
       />

@@ -7,8 +7,8 @@ const StyledDeleteButton = styled.button`
   padding: 0;
 `;
 
-export const DeleteButton = ({ altText, dataSelector }) => (
-  <StyledDeleteButton data-selector={dataSelector}>
+export const DeleteButton = ({ altText, dataSelector, onClick }) => (
+  <StyledDeleteButton onClick={onClick} data-selector={dataSelector}>
     <img width="24px" src="/trash.svg" alt={altText} />
   </StyledDeleteButton>
 );

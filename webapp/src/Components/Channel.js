@@ -118,6 +118,23 @@ class Channel extends React.Component {
     this.getMessages();
   };
 
+  deleteMessage = id => async () => {
+    // () =>  (closure) permet de ne pas déclencher la fct deleteMessage à chaque rendu. sinon tous les messages seraient supprimés au premier render().
+    try {
+      const response = await fetch(`/api/messages/${id}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        this.setState({
+          messages: this.state.messages.filter(message => message.id !== id),
+        });
+      }
+    } catch (error) {
+      // window.alert('Erreur lors de la suppression du message');
+    }
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     // will need to refetch whenever React Router passes another channel id without unmounting component
     if (nextProps.channelId !== prevState.channelId) {
@@ -146,6 +163,7 @@ class Channel extends React.Component {
           {this.state.messages.map(message => {
             return (
               <Message
+                id={message.id}
                 key={message.id}
                 username={message.username}
                 content={message.content}
@@ -154,6 +172,7 @@ class Channel extends React.Component {
                   message.extra_info ? JSON.parse(message.extra_info) : {}
                 }
                 isOwner={this.props.currentUser.id === message.user_id}
+                deleteMessage={this.deleteMessage(message.id)}
               />
             );
           })}
