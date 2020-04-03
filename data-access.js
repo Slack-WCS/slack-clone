@@ -17,6 +17,7 @@ const getMessages = async (channelId, offset) => {
       content, 
       id_chan, 
       created_at, 
+      user_id,
       username,
       extra_info,
       COUNT(*) OVER() AS total_count 
@@ -104,6 +105,7 @@ const getMessage = async messageId => {
       content, 
       id_chan,
       created_at, 
+      user_id,
       username,
       extra_info
     FROM messages

@@ -69,6 +69,7 @@ describe('getMessages', () => {
           "id": 11,
           "id_chan": 1,
           "total_count": "3",
+          "user_id": 1,
           "username": "arnaud",
         },
         Object {
@@ -77,6 +78,7 @@ describe('getMessages', () => {
           "id": 10,
           "id_chan": 1,
           "total_count": "3",
+          "user_id": 2,
           "username": "monia",
         },
         Object {
@@ -85,6 +87,7 @@ describe('getMessages', () => {
           "id": 9,
           "id_chan": 1,
           "total_count": "3",
+          "user_id": 1,
           "username": "arnaud",
         },
       ]
