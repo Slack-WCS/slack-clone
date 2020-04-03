@@ -153,6 +153,7 @@ class Channel extends React.Component {
                 extraInfo={
                   message.extra_info ? JSON.parse(message.extra_info) : {}
                 }
+                isOwner={this.props.currentUser.id === message.user_id}
               />
             );
           })}
