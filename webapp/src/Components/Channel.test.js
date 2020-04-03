@@ -17,7 +17,7 @@ describe('Channel', () => {
   beforeEach(() => {
     fetchMock.reset();
     fetchMock.getOnce(
-      `/api/channels/1/messages`,
+      `/api/channels/1/messages?page=1`,
       {
         messages: [],
       },
@@ -26,37 +26,6 @@ describe('Channel', () => {
   });
 
   describe('when sending message', () => {
-    describe('when server responds with 201', () => {
-      it('should display message', async done => {
-        fetchMock.post(`/api/channels/1/messages`, 201, {
-          headers: { 'Content-Type': 'application/json' },
-          body: {
-            contentMessage: 'Bonjour',
-            channelId: 1,
-          },
-        });
-        fetchMock.getOnce(
-          `/api/channels/1/messages`,
-          {
-            messages: [{ content: 'Bonjour', id: 2, username: 'lala' }],
-          },
-          { overwriteRoutes: false }
-        );
-
-        const wrapper = mount(<Channel channelId={1} />);
-        setImmediate(() => {
-          wrapper.update();
-          typeAndSubmitMessage(wrapper);
-          setImmediate(() => {
-            wrapper.update();
-            const message = wrapper.find(Message);
-            expect(message.props().content).toEqual('Bonjour');
-            done();
-          });
-        });
-      });
-    });
-
     describe('when server responds with 500', () => {
       it('should display error message', async done => {
         fetchMock.post(`/api/channels/1/messages`, 500, {
