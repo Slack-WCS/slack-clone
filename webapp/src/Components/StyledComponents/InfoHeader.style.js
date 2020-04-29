@@ -1,20 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-
-const SessionLinksContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  padding: 5px 0;
-`;
-
-const SessionLinks = styled(Link)`
-  color: #fff;
-  font-weight: bold;
-  &:hover {
-    text-decoration: underline;
-    color: #fff;
-  }
-`;
 
 const WebsiteName = styled.h1`
   font-size: 24px;
@@ -43,11 +27,4 @@ const UserName = styled.p`
   color: #fff;
 `;
 
-export {
-  Logo,
-  UserName,
-  UserStatus,
-  WebsiteName,
-  SessionLinks,
-  SessionLinksContainer,
-};
+export { Logo, UserName, UserStatus, WebsiteName };

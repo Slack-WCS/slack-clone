@@ -1,9 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable strict */
-/* eslint-disable no-var */
-/* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
-
 'use strict';
 
 var dbm;
@@ -21,18 +15,17 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`CREATE TABLE messages(
+  return db.runSql(`CREATE TABLE message(
     id SERIAL PRIMARY KEY,
     id_chan INT references channel(id)
     ON DELETE CASCADE,
     content TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
 };
 
 exports.down = function(db) {
-  return db.runSql(`DROP TABLE messages`);
+  return db.runSql(`DROP TABLE message`);
 };
 
 exports._meta = {

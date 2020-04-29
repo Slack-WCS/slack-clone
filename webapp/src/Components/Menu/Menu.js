@@ -58,7 +58,6 @@ class Menu extends React.Component {
       if (chan.id === parseInt(idChan)) {
         return chan.name;
       }
-      return '';
     });
     return res;
   };
@@ -70,20 +69,20 @@ class Menu extends React.Component {
     this.setState({ channels, shouldRefreshChannels: false });
   };
 
-  createChannel = async e => {
-    e.preventDefault();
-    await fetch('/api/channels', {
+  postChannels = e => {
+    fetch('/api/channels', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({
         nameChannels: this.state.nameChannels[0],
       }),
     });
+    e.preventDefault();
     this.setState({ shouldRefreshChannels: true, nameChannels: '' });
   };
 
-  deleteChannels = async channelId => {
-    await fetch(`/api/channels/${channelId}/`, {
+  deleteChannels = channelId => {
+    fetch(`/api/channels/${channelId}/`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'DELETE',
     });
@@ -95,7 +94,6 @@ class Menu extends React.Component {
     const burgerButton = this.state.isOpenMenu;
 
     return (
-<<<<<<< HEAD
       <>
         <div>
           <Navbar role="navigation">
@@ -133,55 +131,6 @@ class Menu extends React.Component {
                         </InputGroupAddon>
                       </InputGroup>
                     </CreateChannelForm>
-=======
-      <div>
-        <Navbar role="navigation">
-          {/* On appel le composant BurgerButton et on lui fais passer en paramètre la fonction toggleIsOpenMenu et burgerButton */}
-          <BurgerButton
-            fonction={this.toggleIsOpenMenu}
-            burgerButton={burgerButton}
-          />
-          {/* si isOpenMenu est égal à true on set la classe à 'is-visible-in-mobile' */}
-          <LeftNavbar isOpenMenu={this.state.isOpenMenu}>
-            <MenuListElements>
-              <InfoHeader currentUser={this.props.currentUser} />
-            </MenuListElements>
-            <MenuListElements>
-              <SearchBar />
-            </MenuListElements>
-            <MenuListElements>
-              <NavbarLinks href="#">Home</NavbarLinks>
-            </MenuListElements>
-            <MenuListElements>
-              <ul>
-                <li>
-                  <CreateChannelForm onSubmit={this.createChannel}>
-                    <InputGroup>
-                      <GlobalInput
-                        placeholder="Create channel"
-                        type="text"
-                        value={this.state.nameChannels}
-                        onChange={this.getNameChannels}
-                      />
-                      <InputGroupAddon addonType="append">
-                        <Button className="submit-button" type="submit">
-                          Create
-                        </Button>
-                      </InputGroupAddon>
-                    </InputGroup>
-                  </CreateChannelForm>
-                </li>
-                {this.state.channels.map(channel => (
-                  <li key={channel.id}>
-                    <RouteLink to={`/channels/${channel.id}/messages`}>
-                      {channel.name}
-                      <DeleteChannel
-                        onClick={() => this.deleteChannels(channel.id)}
-                      >
-                        X
-                      </DeleteChannel>
-                    </RouteLink>
->>>>>>> affichage channels ok / affichage messages WIP
                   </li>
                   {this.state.channels.map(channel => (
                     <li key={channel.id}>
@@ -198,7 +147,6 @@ class Menu extends React.Component {
                 </ul>
               </MenuListElements>
 
-<<<<<<< HEAD
               <MenuListElements>
                 <NavbarLinks href="#">Private messages</NavbarLinks>
               </MenuListElements>
@@ -221,26 +169,6 @@ class Menu extends React.Component {
           </Switch>
         </div>
       </>
-=======
-            <MenuListElements>
-              <NavbarLinks href="#">Private messages</NavbarLinks>
-            </MenuListElements>
-          </LeftNavbar>
-        </Navbar>
-        <Switch>
-          <Route
-            path="/channels/:channelId/messages"
-            render={props => (
-              <Channel
-                currentUser={this.props.currentUser}
-                channelId={props.match.params.channelId}
-                chanName={this.getChanName(props.match.params.channelId)}
-              />
-            )}
-          />
-        </Switch>
-      </div>
->>>>>>> front authentification
     );
   }
 }

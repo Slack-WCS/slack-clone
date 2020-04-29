@@ -1,30 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Authentification from '../Authentification';
+
 import {
   UserName,
   UserStatus,
   WebsiteName,
-  SessionLinks,
-  SessionLinksContainer,
 } from '../StyledComponents/InfoHeader.style';
-<<<<<<< HEAD
 const InfoHeader = () => {
-=======
-
-const InfoHeader = ({ currentUser }) => {
->>>>>>> affichage channels ok / affichage messages WIP
   return (
     <div>
-      <WebsiteName>Slack-clone</WebsiteName>
-
-      {/* <SessionLinksContainer>
-        <SessionLinks to="/sign_up">Sign up</SessionLinks>
-        <SessionLinks to="/log_in">Log in</SessionLinks>
-      </SessionLinksContainer> */}
+      <Authentification />
+      <WebsiteName>
+        Slack-clone
+        {/* <Logo alt="Home" src={logo} /> */}
+      </WebsiteName>
 
       <div>
         <UserStatus>•</UserStatus>
-        <UserName>{currentUser.username}</UserName>
+        <UserName>Nom de l'utilisateur</UserName>
       </div>
     </div>
   );
