@@ -17,12 +17,11 @@ const TopBarChannelName = styled.div`
   @media screen and (min-width: 769px) {
     background: #444;
     padding-left: 20px;
-    max-height: initial;
-    height: 10vh;
+    height: 45px;
+    padding-top: 0;
   }
   background: #444;
-  height: 14vh;
-  display: flex;
+  padding-top: 35px;
 `;
 
 const ChannelName = styled.h2`
@@ -31,12 +30,11 @@ const ChannelName = styled.h2`
     font-size: 20px;
     text-transform: uppercase;
     padding: 10px;
-    margin: 0;
   }
+  padding: 10px;
   padding-left: 10px;
   display: flex;
   font-size: 25px;
-  align-items: flex-end;
   margin: 0;
 `;
 
@@ -49,6 +47,8 @@ const AllMessages = styled.div`
   padding: 10px;
   max-height: calc(100vh - 14vh - 37px);
   overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
 `;
 
 const PostMessageInput = styled.form`

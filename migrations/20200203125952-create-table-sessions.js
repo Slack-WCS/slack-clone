@@ -1,11 +1,7 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable strict */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-var */
 /* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
-
-'use strict';
-
 var dbm;
 var type;
 var seed;
@@ -20,19 +16,18 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-  return db.runSql(`CREATE TABLE messages(
+exports.up = async function(db) {
+  await db.runSql(`CREATE TABLE session (
     id SERIAL PRIMARY KEY,
-    id_chan INT references channel(id)
-    ON DELETE CASCADE,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT
+    user_id INT,
+    session_id uuid DEFAULT uuid_generate_v4()
   )`);
+  return db.runSql(`ALTER TABLE session 
+  ADD FOREIGN KEY (user_id) REFERENCES users (id)`);
 };
 
 exports.down = function(db) {
-  return db.runSql(`DROP TABLE messages`);
+  return db.runSql(`DROP TABLE session`);
 };
 
 exports._meta = {

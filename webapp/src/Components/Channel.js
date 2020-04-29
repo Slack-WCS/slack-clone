@@ -11,20 +11,38 @@ import {
 import { GlobalInput } from './StyledComponents/Menu.style';
 
 class Channel extends React.Component {
-  state = {
-    chanName: this.props.chanName,
-    channelId: this.props.channelId,
-    isLoading: true,
-    messages: [],
-    messageContent: '',
-    shouldRefetchMessages: false,
-  };
+  constructor(props) {
+    super(props);
+    this.messagesRef = React.createRef();
+    this.state = {
+      chanName: this.props.chanName,
+      channelId: this.props.channelId,
+      isLoading: true,
+      messages: [],
+      messageContent: '',
+      shouldRefetchMessages: false,
+      errorSendingMessage: false,
+      shouldScrollToMostRecent: false,
+      nextPage: 1,
+    };
+  }
 
   componentDidMount() {
     this.getMessages();
+    const socket = new WebSocket('ws://127.0.0.1:8000/');
+    socket.onmessage = msg => {
+      const event = JSON.parse(msg.data);
+      if (
+        event.type === 'MESSAGE_CREATED' &&
+        parseInt(this.state.channelId) === event.payload.id_chan
+      ) {
+        this.setState({ messages: [event.payload, ...this.state.messages] });
+      }
+    };
   }
 
   componentDidUpdate() {
+    this.scrollToMostRecent();
     if (this.state.shouldRefetchMessages) {
       this.setState({ shouldRefetchMessages: false });
       this.getMessages();
@@ -37,28 +55,67 @@ class Channel extends React.Component {
     });
   };
 
+  scrollToMostRecent = () => {
+    if (this.state.shouldScrollToMostRecent) {
+      this.messagesRef.current.scrollTop = this.messagesRef.current.scrollHeight;
+      this.setState({ shouldScrollToMostRecent: false });
+    }
+  };
+
   async getMessages() {
     this.setState({
       shouldRefetchMessages: false,
     });
 
     const response = await fetch(
-      `/api/channels/${this.props.channelId}/messages`
+      `/api/channels/${this.props.channelId}/messages?page=${this.state.nextPage}`
     );
-    const { messages } = await response.json();
-    this.setState({ messages, isLoading: false });
+
+    const { messages, nextPage } = await response.json();
+
+    this.setState({
+      messages: [...this.state.messages, ...messages],
+      isLoading: false,
+      shouldScrollToMostRecent: false,
+      nextPage,
+    });
   }
 
-  postMessages = e => {
-    fetch(`/api/channels/${this.props.channelId}/messages`, {
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-      body: JSON.stringify({
-        contentMessages: this.state.messageContent[0],
-      }),
-    });
+  showErrorSendingMessage = () => {
+    this.setState({ errorSendingMessage: true });
+  };
+
+  sendMessage = async e => {
     e.preventDefault();
-    this.setState({ shouldRefetchMessages: true, messageContent: '' });
+    try {
+      const response = await fetch(
+        `/api/channels/${this.props.channelId}/messages`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          body: JSON.stringify({
+            contentMessage: this.state.messageContent[0],
+            channelId: this.props.channelId,
+          }),
+        }
+      );
+      if (response.ok) {
+        this.setState({
+          messageContent: '',
+          errorSendingMessage: false,
+          shouldScrollToMostRecent: true,
+        });
+      } else {
+        this.showErrorSendingMessage();
+      }
+    } catch (error) {
+      console.error(error);
+      this.showErrorSendingMessage();
+    }
+  };
+
+  fetchPreviousMessages = () => {
+    this.getMessages();
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -69,6 +126,8 @@ class Channel extends React.Component {
         channelId: nextProps.channelId,
         chanName: nextProps.chanName,
         shouldRefetchMessages: true,
+        messages: [],
+        nextPage: 1,
       };
     }
     return null;
@@ -83,14 +142,37 @@ class Channel extends React.Component {
         <TopBarChannelName>
           <ChannelName>{this.state.chanName}</ChannelName>
         </TopBarChannelName>
-        <AllMessages>
+        <AllMessages ref={this.messagesRef}>
           {this.state.messages.map(message => {
-            return <Message key={message.id} content={message.content} />;
+            return (
+              <Message
+                key={message.id}
+                username={message.username}
+                content={message.content}
+                createdAt={message.created_at}
+                extraInfo={
+                  message.extra_info ? JSON.parse(message.extra_info) : {}
+                }
+              />
+            );
           })}
+          <div>
+            {this.state.nextPage ? (
+              <button onClick={this.fetchPreviousMessages}>
+                Charger les messages précédents
+              </button>
+            ) : null}
+          </div>
         </AllMessages>
-        <PostMessageInput onSubmit={this.postMessages}>
+        <PostMessageInput onSubmit={this.sendMessage}>
           <InputGroup>
+            {this.state.errorSendingMessage && (
+              <div data-selector="error-sending-message">
+                Message non envoyé – veuillez réessayer
+              </div>
+            )}
             <GlobalInput
+              data-selector="sendMessageTextInput"
               placeholder="Write a message"
               type="text"
               value={this.state.messageContent}

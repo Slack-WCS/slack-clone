@@ -1,29 +1,23 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const path = require('path');
-const routes = require('./routes');
-
-const app = express();
-
 require('dotenv').config();
 
-const port = process.env.PORT || 8000;
-// Middlewares
-app.use(morgan('dev'));
-// Body Parser configuration
+const http = require('http');
+const WebSocket = require('ws');
+const app = require('./app');
 
-app.use(bodyParser.json({ limit: '10mb', extended: true }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+const server = http.createServer(app);
 
-app.use('/api', routes);
-// pour heroku + commande ds package
-app.use(express.static(path.join(__dirname, 'webapp', 'build')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'webapp', 'build', 'index.html'));
+const { EVENTS, eventEmitter } = require('./events');
+
+const wsserver = new WebSocket.Server({ server });
+
+wsserver.on('connection', ws => {
+  eventEmitter.on(EVENTS.MESSAGE_CREATED, result => {
+    ws.send(JSON.stringify({ type: EVENTS.MESSAGE_CREATED, payload: result }));
+  });
 });
-app.listen(port, function() {
+
+const port = process.env.PORT || 8000;
+server.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Example app listening on port 127.0.0.1:${port}`);
 });
-
-module.exports = app;

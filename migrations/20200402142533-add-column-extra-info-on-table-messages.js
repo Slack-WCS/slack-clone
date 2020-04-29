@@ -16,20 +16,11 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`INSERT INTO messages (content, id_chan) VALUES
-    ('1er message chan 1', '1'),
-    ('2e message chan 1', '1'),
-    ('3e message chan 1', '1'),
-    ('4e message chan 1', '1'),
-    ('1er message chan 2', '2'),
-    ('2e message chan 2', '2'),
-    ('3e message chan 2', '2'),
-    ('4e message chan 2', '2')
-  `);
+  return db.runSql(`ALTER TABLE messages ADD COLUMN extra_info TEXT;`);
 };
 
 exports.down = function(db) {
-  return null;
+  return db.runSql(`ALTER TABLE messages DROP COLUMN extra_info;`);
 };
 
 exports._meta = {

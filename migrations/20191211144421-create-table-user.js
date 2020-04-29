@@ -1,14 +1,9 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable strict */
-/* eslint-disable no-var */
-/* eslint-disable func-names */
 /* eslint-disable no-underscore-dangle */
-
-'use strict';
-
-var dbm;
-var type;
-var seed;
+/* eslint-disable func-names */
+/* eslint-disable no-unused-vars */
+let dbm;
+let type;
+let seed;
 
 /**
  * We receive the dbmigrate dependency from dbmigrate initially.
@@ -21,18 +16,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.runSql(`CREATE TABLE messages(
+  return db.runSql(`CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    id_chan INT references channel(id)
-    ON DELETE CASCADE,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
   )`);
 };
-
 exports.down = function(db) {
-  return db.runSql(`DROP TABLE messages`);
+  return db.runSql(`DROP TABLE users`);
 };
 
 exports._meta = {
