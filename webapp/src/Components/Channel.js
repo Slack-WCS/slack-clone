@@ -9,6 +9,7 @@ import {
   PostMessageInput,
 } from './StyledComponents/Channel.style';
 import { GlobalInput } from './StyledComponents/Menu.style';
+import { log } from 'util';
 
 class Channel extends React.Component {
   constructor(props) {
@@ -72,13 +73,56 @@ class Channel extends React.Component {
     );
 
     const { messages, nextPage } = await response.json();
-
+    console.log('this.state.messages', this.state.messages);
     this.setState({
       messages: [...this.state.messages, ...messages],
       isLoading: false,
       shouldScrollToMostRecent: false,
       nextPage,
     });
+  }
+
+  getDaysWithMessages = messages => {
+    const daysWithMessages = [];
+    messages.forEach(message => {
+      const day = message.created_at.slice(0, 10);
+      const dayWithMessages = daysWithMessages.find(item => item.day === day);
+      if (!dayWithMessages) {
+        daysWithMessages.push({
+          day,
+          messages: [message],
+        });
+      } else {
+        dayWithMessages.messages.push(message);
+      }
+    });
+    return daysWithMessages;
+  };
+
+  formatDate(date) {
+    const today = new Date();
+    const options = {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    };
+    if (today.toDateString() === new Date(date).toDateString()) {
+      return "Ajourd'hui";
+    } else if (
+      new Date(today.setDate(today.getDate() - 1)).toDateString() ===
+      new Date(date).toDateString()
+    ) {
+      return 'Hier';
+    } else if (today.getUTCFullYear() > new Date(date).getUTCFullYear()) {
+      return new Date(date).toLocaleDateString(undefined, {
+        weekday: 'long',
+        month: 'long',
+        year: 'numeric',
+        day: 'numeric',
+      });
+    } else {
+      return new Date(date).toLocaleDateString(undefined, options);
+    }
   }
 
   showErrorSendingMessage = () => {
@@ -154,35 +198,48 @@ class Channel extends React.Component {
     if (this.state.isLoading) {
       return <div>Loading…</div>;
     }
+    const daysWithMessages = this.getDaysWithMessages(this.state.messages); // je fais le group by ici dans le render pour avoir le state TJRS clean. sinon j'aurai dû faire 'this.getDaysWithMessages(this.state.messages)' dans le getMessages + dans le websocket.
+
     return (
       <Thread>
         <TopBarChannelName>
           <ChannelName>{this.state.chanName}</ChannelName>
         </TopBarChannelName>
         <AllMessages ref={this.messagesRef}>
-          {this.state.messages.map(message => {
-            return (
-              <Message
-                id={message.id}
-                key={message.id}
-                username={message.username}
-                content={message.content}
-                createdAt={message.created_at}
-                extraInfo={
-                  message.extra_info ? JSON.parse(message.extra_info) : {}
-                }
-                isOwner={this.props.currentUser.id === message.user_id}
-                deleteMessage={this.deleteMessage(message.id)}
-              />
-            );
-          })}
-          <div>
-            {this.state.nextPage ? (
-              <button onClick={this.fetchPreviousMessages}>
-                Charger les messages précédents
-              </button>
-            ) : null}
-          </div>
+          <>
+            {daysWithMessages.map(dayWithMessages => {
+              return (
+                // ici obligé de mettre un return car {}
+                <>
+                  <p>{dayWithMessages.day}</p>
+                  {dayWithMessages.messages.map((
+                    // ici return implicite car ()
+                    message
+                  ) => (
+                    <Message
+                      id={message.id}
+                      key={message.id}
+                      username={message.username}
+                      content={message.content}
+                      createdAt={message.created_at}
+                      extraInfo={
+                        message.extra_info ? JSON.parse(message.extra_info) : {}
+                      }
+                      isOwner={this.props.currentUser.id === message.user_id}
+                      deleteMessage={this.deleteMessage(message.id)}
+                    />
+                  ))}
+                </>
+              );
+            })}
+            <div>
+              {this.state.nextPage ? (
+                <button onClick={this.fetchPreviousMessages}>
+                  Charger les messages précédents
+                </button>
+              ) : null}
+            </div>
+          </>
         </AllMessages>
         <PostMessageInput onSubmit={this.sendMessage}>
           <InputGroup>
