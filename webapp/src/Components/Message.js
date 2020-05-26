@@ -1,4 +1,11 @@
 import React from 'react';
+import {
+  MessageContainer,
+  MessageHour,
+  MessageOwner,
+  MessageContent,
+  MessageHourContainer,
+} from './StyledComponents/Message.style.js';
 import { DeleteButton } from './StyledComponents/DeleteButton';
 
 const getPrintableDate = dateAsString => {
@@ -15,15 +22,7 @@ const Message = ({
   isOwner,
   deleteMessage,
 }) => (
-  <div data-selector={`message-${id}`}>
-    <div>{getPrintableDate(createdAt)}</div>
-    <b>{username}</b>
-    <p>{content}</p>
-    {extraInfo.title && (
-      <a href={extraInfo.url} target="_blank" rel="noopener noreferrer">
-        <article>{extraInfo.title}</article> <p>{extraInfo.description}</p>
-      </a>
-    )}
+  <MessageContainer data-selector={`message-${id}`}>
     {isOwner && (
       <DeleteButton
         onClick={deleteMessage}
@@ -31,7 +30,17 @@ const Message = ({
         altText="Delete message"
       />
     )}
-  </div>
+    <MessageHourContainer>
+      <MessageHour>{getPrintableDate(createdAt)}</MessageHour>
+    </MessageHourContainer>
+    <MessageOwner>{username}</MessageOwner>
+    <MessageContent>{content}</MessageContent>
+    {extraInfo.title && (
+      <a href={extraInfo.url} target="_blank" rel="noopener noreferrer">
+        <article>{extraInfo.title}</article> <p>{extraInfo.description}</p>
+      </a>
+    )}
+  </MessageContainer>
 );
 
 export default Message;

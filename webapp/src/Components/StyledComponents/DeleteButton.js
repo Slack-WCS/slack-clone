@@ -4,7 +4,8 @@ import styled from 'styled-components';
 const StyledDeleteButton = styled.button`
   background: none;
   border: none;
-  padding: 0;
+  padding: 5px;
+  float: right;
 `;
 
 export const DeleteButton = ({ altText, dataSelector, onClick }) => (

@@ -72,13 +72,59 @@ class Channel extends React.Component {
     );
 
     const { messages, nextPage } = await response.json();
-
+    const allMessages = [
+      ...this.state.messages,
+      ...this.getDaysWithMessages(messages),
+      ...messages,
+    ];
     this.setState({
-      messages: [...this.state.messages, ...messages],
+      messages: allMessages,
       isLoading: false,
       shouldScrollToMostRecent: false,
       nextPage,
     });
+  }
+  getDaysWithMessages = messages => {
+    const daysWithMessages = [];
+    messages.forEach(message => {
+      const day = message.created_at.slice(0, 10);
+      const dayWithMessages = daysWithMessages.find(item => item.day === day);
+      if (!dayWithMessages) {
+        daysWithMessages.push({
+          day,
+          messages: [message],
+        });
+      } else {
+        dayWithMessages.messages.push(message);
+      }
+    });
+    return daysWithMessages;
+  };
+
+  formatDate(date) {
+    const today = new Date();
+    const options = {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    };
+    if (today.toDateString() === new Date(date).toDateString()) {
+      return "Ajourd'hui";
+    } else if (
+      new Date(today.setDate(today.getDate() - 1)).toDateString() ===
+      new Date(date).toDateString()
+    ) {
+      return 'Hier';
+    } else if (today.getUTCFullYear() > new Date(date).getUTCFullYear()) {
+      return new Date(date).toLocaleDateString(undefined, {
+        weekday: 'long',
+        month: 'long',
+        year: 'numeric',
+        day: 'numeric',
+      });
+    } else {
+      return new Date(date).toLocaleDateString(undefined, options);
+    }
   }
 
   showErrorSendingMessage = () => {
