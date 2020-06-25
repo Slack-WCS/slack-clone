@@ -2,8 +2,16 @@
 const pool = require('./db_pool');
 const { UnknownError } = require('./utils');
 
-const getChannels = async () => {
-  const channels = await pool.query('SELECT * FROM channel ORDER BY id ASC');
+const getChannels = async userId => {
+  const channels = await pool.query(
+    `
+    SELECT * FROM channel
+    JOIN user_channel_permission
+    ON channel.id = user_channel_permission.channel_id
+    WHERE user_channel_permission.user_id = $1
+    ORDER BY id ASC`,
+    [userId]
+  );
   return channels.rows;
 };
 
