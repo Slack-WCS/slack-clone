@@ -119,6 +119,12 @@ const deleteMessage = async (req, res) => {
   return res.sendStatus(200);
 };
 
+const getUsersFromChannel = async (req, res) => {
+  const { channelId } = req.params;
+  const users = await dataAccess.getUsersFromChannel(channelId);
+  return res.status(200).json({ users });
+};
+
 module.exports = {
   getChannels,
   getMessages,
@@ -129,4 +135,5 @@ module.exports = {
   createSession,
   getCurrentUser,
   deleteMessage,
+  getUsersFromChannel,
 };
