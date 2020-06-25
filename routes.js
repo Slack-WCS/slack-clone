@@ -16,6 +16,8 @@ router.post('/users', controllers.createUser);
 router.post('/sessions', controllers.createSession);
 
 // Channels & messages
+router.get('/channels/:channelId/users', controllers.getUsersFromChannel);
+
 router.post('/channels', controllers.createChannel);
 
 router.post('/channels/:channelId/messages', controllers.createMessage);

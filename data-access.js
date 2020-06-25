@@ -151,6 +151,17 @@ const deleteMessage = async id => {
   await pool.query(`DELETE FROM messages WHERE id = $1`, [id]);
 };
 
+const getUsersFromChannel = async channelId => {
+  const response = await pool.query(
+    `SELECT id, username FROM users 
+    JOIN user_channel_permission 
+    ON users.id = user_channel_permission.user_id 
+    WHERE user_channel_permission.channel_id = $1`,
+    [channelId]
+  );
+  return response.rows;
+};
+
 module.exports = {
   getChannels,
   getMessages,
@@ -164,4 +175,5 @@ module.exports = {
   getMessage,
   deleteMessage,
   doesMessageBelongToUser,
+  getUsersFromChannel,
 };

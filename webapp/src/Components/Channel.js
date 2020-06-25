@@ -25,6 +25,7 @@ class Channel extends React.Component {
       errorSendingMessage: false,
       shouldScrollToMostRecent: false,
       nextPage: 1,
+      users: [],
     };
   }
 
@@ -49,6 +50,18 @@ class Channel extends React.Component {
       this.getMessages();
     }
   }
+  getUsersFromChannel = async channelId => {
+    const response = await fetch(`/api/channels/${channelId}/users`);
+    const users = await response.json();
+    // méthode destructurée
+    this.setState({ ...users });
+    // méthode non destructurée : this.setState({ users : users.users });
+    // On fait users.users car il s'agit d'un objet users qui reçoit un tableau d'objets:
+    // {users: Array(2)}
+    // users: Array(2)
+    // 0: {id: 1, username: "Michelle"}
+    // 1: {id: 2, username: "patrick l'étoile de mer"}
+  };
 
   getMessagesContent = e => {
     this.setState({
@@ -203,7 +216,16 @@ class Channel extends React.Component {
     return (
       <Thread>
         <TopBarChannelName>
-          <ChannelName>{this.state.chanName}</ChannelName>
+          <ChannelName
+            onClick={() => this.getUsersFromChannel(this.state.channelId)}
+          >
+            {this.state.chanName}
+          </ChannelName>
+          <ul>
+            {this.state.users.map(user => {
+              return <li key={user.id}>{user.username}</li>;
+            })}
+          </ul>
         </TopBarChannelName>
         <AllMessages ref={this.messagesRef}>
           <>
@@ -211,7 +233,6 @@ class Channel extends React.Component {
               return (
                 // ici obligé de mettre un return car {}
                 <>
-                  <p>{dayWithMessages.day}</p>
                   {dayWithMessages.messages.map((
                     // ici return implicite car ()
                     message
