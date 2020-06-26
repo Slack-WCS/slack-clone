@@ -34,6 +34,7 @@ describe('App', () => {
   let myMessage;
   let messageFromUser2;
   let mySessionId;
+  let mySessionIdForUser2;
   let myUserId;
   let user2Id;
   const channelId = 1;
@@ -47,6 +48,8 @@ describe('App', () => {
     myUserId = await dataAccess.getVerifiedUserId('me', 'myPassword');
     user2Id = await dataAccess.getVerifiedUserId('user2', 'myPassword');
     mySessionId = await dataAccess.createSession(myUserId);
+    mySessionIdForUser2 = await dataAccess.createSession(user2Id);
+
     myMessage = await dataAccess.createMessage(
       channelId,
       'myMessage',
@@ -91,12 +94,23 @@ describe('App', () => {
 
   describe('GET /api/channels/:channelId/messages', () => {
     describe('when user has permission on channel', () => {
-      it.only('responds with 200 and list of messages on channel', async () => {
+      it('responds with 200 and list of messages on channel', async () => {
         const response = await agent
-          .post(`/api/channels/${channelId}/messages`)
+          .get(`/api/channels/${channelId}/messages?page=1`)
           .set('Cookie', `sessionId=${mySessionId}`);
 
         expect(response.status).toEqual(200);
+        expect(response.body.messages.length).toEqual(2);
+      });
+    });
+
+    describe("when user hasn't permission on channel", () => {
+      it('responds with 403 ', async () => {
+        const response = await agent
+          .get(`/api/channels/${channelId}/messages?page=1`)
+          .set('Cookie', `sessionId=${mySessionIdForUser2}`);
+
+        expect(response.status).toEqual(403);
       });
     });
   });
