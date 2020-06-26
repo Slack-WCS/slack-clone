@@ -2,8 +2,16 @@
 const pool = require('./db_pool');
 const { UnknownError } = require('./utils');
 
-const getChannels = async () => {
-  const channels = await pool.query('SELECT * FROM channel ORDER BY id ASC');
+const getChannels = async userId => {
+  const channels = await pool.query(
+    `
+    SELECT * FROM channel
+    JOIN user_channel_permission
+    ON channel.id = user_channel_permission.channel_id
+    WHERE user_channel_permission.user_id = $1
+    ORDER BY id ASC`,
+    [userId]
+  );
   return channels.rows;
 };
 
@@ -131,8 +139,19 @@ const doesMessageBelongToUser = async (messageId, userId) => {
     [messageId, userId]
   );
   const messageBelongsToUser = result.rows[0].exists;
-  console.log('>>>> booléen ?', result.rows[0].exists);
   return messageBelongsToUser;
+};
+
+const doesUserHavePermissionToChannel = async (channelId, userId) => {
+  const result = await pool.query(
+    `SELECT EXISTS(
+    SELECT *
+    FROM user_channel_permission
+    WHERE channel_id = $1 AND user_id = $2
+  )`,
+    [channelId, userId]
+  );
+  return result.rows[0].exists;
 };
 
 const deleteChannels = async channelId => {
@@ -141,6 +160,17 @@ const deleteChannels = async channelId => {
 
 const deleteMessage = async id => {
   await pool.query(`DELETE FROM messages WHERE id = $1`, [id]);
+};
+
+const getUsersFromChannel = async channelId => {
+  const response = await pool.query(
+    `SELECT id, username FROM users 
+    JOIN user_channel_permission 
+    ON users.id = user_channel_permission.user_id 
+    WHERE user_channel_permission.channel_id = $1`,
+    [channelId]
+  );
+  return response.rows;
 };
 
 module.exports = {
@@ -156,4 +186,6 @@ module.exports = {
   getMessage,
   deleteMessage,
   doesMessageBelongToUser,
+  doesUserHavePermissionToChannel,
+  getUsersFromChannel,
 };

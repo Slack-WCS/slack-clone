@@ -5,7 +5,9 @@ const { EVENTS, eventEmitter } = require('./events');
 
 // GET
 const getChannels = async (req, res) => {
-  const channels = await dataAccess.getChannels();
+  const { user } = req;
+  const channels = await dataAccess.getChannels(user.id);
+  // console.log('--------------------------------> req.user', user);
   return res.status(200).json({ channels });
 };
 
@@ -15,8 +17,8 @@ const getMessages = async (req, res) => {
   const channelId = parseInt(req.params.channelId);
   const page = parseInt(req.query.page);
   const offset = (page - 1) * MESSAGES_PAGE_SIZE;
-
   const messagesWithCount = await dataAccess.getMessages(channelId, offset);
+
   if (page * MESSAGES_PAGE_SIZE >= messagesWithCount.totalCount) {
     messagesWithCount.nextPage = null;
   } else {
@@ -117,6 +119,12 @@ const deleteMessage = async (req, res) => {
   return res.sendStatus(200);
 };
 
+const getUsersFromChannel = async (req, res) => {
+  const { channelId } = req.params;
+  const users = await dataAccess.getUsersFromChannel(channelId);
+  return res.status(200).json({ users });
+};
+
 module.exports = {
   getChannels,
   getMessages,
@@ -127,4 +135,5 @@ module.exports = {
   createSession,
   getCurrentUser,
   deleteMessage,
+  getUsersFromChannel,
 };
