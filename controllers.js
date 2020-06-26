@@ -17,8 +17,8 @@ const getMessages = async (req, res) => {
   const channelId = parseInt(req.params.channelId);
   const page = parseInt(req.query.page);
   const offset = (page - 1) * MESSAGES_PAGE_SIZE;
-
   const messagesWithCount = await dataAccess.getMessages(channelId, offset);
+
   if (page * MESSAGES_PAGE_SIZE >= messagesWithCount.totalCount) {
     messagesWithCount.nextPage = null;
   } else {

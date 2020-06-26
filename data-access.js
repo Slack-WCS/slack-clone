@@ -139,8 +139,19 @@ const doesMessageBelongToUser = async (messageId, userId) => {
     [messageId, userId]
   );
   const messageBelongsToUser = result.rows[0].exists;
-  console.log('>>>> booléen ?', result.rows[0].exists);
   return messageBelongsToUser;
+};
+
+const doesUserHavePermissionToChannel = async (channelId, userId) => {
+  const result = await pool.query(
+    `SELECT EXISTS(
+    SELECT *
+    FROM user_channel_permission
+    WHERE channel_id = $1 AND user_id = $2
+  )`,
+    [channelId, userId]
+  );
+  return result.rows[0].exists;
 };
 
 const deleteChannels = async channelId => {
@@ -175,5 +186,6 @@ module.exports = {
   getMessage,
   deleteMessage,
   doesMessageBelongToUser,
+  doesUserHavePermissionToChannel,
   getUsersFromChannel,
 };

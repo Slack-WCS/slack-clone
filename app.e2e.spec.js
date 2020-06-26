@@ -36,8 +36,8 @@ describe('App', () => {
   let mySessionId;
   let myUserId;
   let user2Id;
-  const channelId = 13;
-  // pensez à changer le '13' par le bon channel_id présent dans la table 'user_channel_permission'
+  const channelId = 1;
+  // pensez à changer le 'channelId = 1' par le bon chiffre présent dans la table 'user_channel_permission'
 
   beforeEach(async () => {
     await resetDatabase();
@@ -85,6 +85,18 @@ describe('App', () => {
         expect(response.status).toEqual(200);
         expect(response.body.users.length).toEqual(1);
         expect(response.body.users[0].id).toEqual(myUserId);
+      });
+    });
+  });
+
+  describe('GET /api/channels/:channelId/messages', () => {
+    describe('when user has permission on channel', () => {
+      it.only('responds with 200 and list of messages on channel', async () => {
+        const response = await agent
+          .post(`/api/channels/${channelId}/messages`)
+          .set('Cookie', `sessionId=${mySessionId}`);
+
+        expect(response.status).toEqual(200);
       });
     });
   });
